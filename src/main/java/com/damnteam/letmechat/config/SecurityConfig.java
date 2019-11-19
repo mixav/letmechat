@@ -20,13 +20,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/js/**",
-                        "/css/**",
-                        "/img/**").permitAll()
+                .antMatchers("/js/**", "/css/**", "/img/**").permitAll()
+                .antMatchers("/", "/index").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .loginProcessingUrl("/perform_login").defaultSuccessUrl("/")
+                .loginProcessingUrl("/perform_login").defaultSuccessUrl("/", true)
                 .failureUrl("/login?error").permitAll()
                 .and()
                 .logout()
@@ -34,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .deleteCookies("JSESSIONID")
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
-                .logoutSuccessUrl("/login?logout");
+                .logoutSuccessUrl("/login");
     }
 
     @Bean
