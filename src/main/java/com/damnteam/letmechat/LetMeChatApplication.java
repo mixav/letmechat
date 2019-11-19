@@ -9,10 +9,10 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfigurat
 
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class, HibernateJpaAutoConfiguration.class})
-public class LetmechatApplication {
+public class LetMeChatApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(LetmechatApplication.class, args);
+		SpringApplication.run(LetMeChatApplication.class, args);
 	}
 
 }

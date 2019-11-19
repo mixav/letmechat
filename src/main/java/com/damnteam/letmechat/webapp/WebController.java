@@ -8,14 +8,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class WebController {
 
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String login() {
-        return "login";
-    }
-
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String sighup() {
-        System.out.println();
+    @RequestMapping(value = "/index")
+    public String index() {
         return "index";
     }
 
