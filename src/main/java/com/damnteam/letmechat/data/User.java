@@ -2,30 +2,38 @@ package com.damnteam.letmechat.data;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @NoArgsConstructor
 @Getter
+@Setter
 @Entity
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String firstName;
-    private String lastName;
-    public User(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+
+    @Column(unique = true, nullable = false)
+    private String login;
+
+    @Column(nullable = false)
+    private String password;
+
+    public User(String login, String password) {
+        this.login = login;
+        this.password = password;
     }
 
     @Override
     public String toString() {
         return String.format(
-                "User[id=%d, firstName='%s', lastName='%s']",
-                id, firstName, lastName);
+                "User[id=%d, login='%s']",
+                id, login);
     }
+
+    @OneToOne
+    private UserData userData;
 }
