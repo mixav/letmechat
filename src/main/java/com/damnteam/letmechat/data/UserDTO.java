@@ -1,5 +1,6 @@
 package com.damnteam.letmechat.data;
 
+import com.damnteam.letmechat.validator.PasswordsMatch;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
@@ -9,6 +10,7 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
+@PasswordsMatch
 public class UserDTO {
 
     @NotNull

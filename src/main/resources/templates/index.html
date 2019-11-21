@@ -1,13 +1,19 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>Test application</title>
 </head>
 <body>
 <div sec:authorize="!isAuthenticated()">
-    <form action="/login">
-        <input type="submit" value="Log in"/>
+    <form th:action="@{/login}">
+        <button type="submit" th:text="#{label.form.loginLink}">submit</button>
+    </form>
+    <form th:action="@{/registration}">
+        <button type="submit" th:text="#{label.form.register}">submit</button>
     </form>
 </div>
 <div sec:authorize="isAuthenticated()">
