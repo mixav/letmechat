@@ -2,13 +2,13 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <meta charset="UTF-8">
     <title>Registration page</title>
+    <link th:href="@{/static/css/bootstrap.min.css}" rel="stylesheet"/>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 </head>
 <body>
-<div style="max-width: fit-content; margin: auto;">
+<div class="container" >
     <h1 th:text="#{label.form.title}"></h1>
     <form action="/" th:object="${user}" method="POST" enctype="utf8">
         <div>
@@ -34,8 +34,8 @@
         <div>
             <label th:text="#{label.user.confirmPass}">confirm</label>
             <input type="password" th:field="*{matchingPassword}" required/>
-            <span id="globalError" style="display:none"></span>
         </div>
+        <span id="globalError" style="display:none"></span>
         <button type="submit" th:text="#{label.form.submit}">submit</button>
     </form>
     <a th:href="@{/login}" th:text="#{label.form.loginLink}">login</a>
@@ -95,6 +95,7 @@
                     }
                 });
         }
+
 
 </script>
 </body>

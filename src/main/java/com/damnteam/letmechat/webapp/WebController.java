@@ -24,11 +24,6 @@ public class WebController {
     @Autowired
     private UserRepository userRepository;
 
-    @RequestMapping(value = "/index")
-    public String index() {
-        return "index";
-    }
-
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public String registration(Model model) {
         UserDTO userDTO = new UserDTO();
