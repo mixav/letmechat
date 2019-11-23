@@ -1,7 +1,5 @@
 package com.damnteam.letmechat.config;
 
-import com.damnteam.letmechat.data.User;
-import com.damnteam.letmechat.data.UserRepository;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,14 +17,6 @@ import java.util.Locale;
 
 @Configuration
 public class AppConfig implements WebMvcConfigurer {
-
-    @Bean
-    public UserRepository initData(UserRepository userRepository) {
-        //TODO put data from bd to file for persistence and implement userDetailsService for authorization
-        userRepository.save(new User("user", "password"));
-        userRepository.save(new User("user2", "password"));
-        return userRepository;
-    }
 
     @Bean
     public LocaleResolver localeResolver() {
@@ -64,7 +54,7 @@ public class AppConfig implements WebMvcConfigurer {
     }
 
     @Override
-    public void addViewControllers(ViewControllerRegistry registry){
+    public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/index").setViewName("index");
     }
 }

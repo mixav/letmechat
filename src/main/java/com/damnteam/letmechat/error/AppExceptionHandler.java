@@ -1,7 +1,6 @@
 package com.damnteam.letmechat.error;
 
 import com.damnteam.letmechat.util.GenericResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +16,12 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
 
     public AppExceptionHandler(MessageSource messageSource) {
         this.messageSource = messageSource;
+    }
+
+    @ExceptionHandler({LoginAlreadyTakenException.class})
+    public ResponseEntity<Object> handleLoginAlreadyTakenException(final Exception ex) {
+        final GenericResponse genericResponse = new GenericResponse(ex.getMessage(), ex.getClass().getSimpleName());
+        return new ResponseEntity<>(genericResponse, HttpStatus.I_AM_A_TEAPOT);
     }
 
     @ExceptionHandler({Exception.class})

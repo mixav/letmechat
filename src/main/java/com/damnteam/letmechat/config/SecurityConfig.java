@@ -1,5 +1,8 @@
 package com.damnteam.letmechat.config;
 
+import com.damnteam.letmechat.data.User;
+import com.damnteam.letmechat.data.UserRepository;
+import com.damnteam.letmechat.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,9 +17,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private final CustomUserDetailsService userDetailsService;
+
+    public SecurityConfig(CustomUserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        //TODO add register page for anonymous
         http
                 .csrf().disable()
                 .authorizeRequests()
@@ -39,13 +47,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     protected PasswordEncoder passwordEncoder() {
-        //TODO get rid of this ??? is it possible?
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public UserRepository initData(UserRepository userRepository) {
+        //TODO put data from bd to file for persistence
+        userRepository.save(new User("user", new BCryptPasswordEncoder().encode("password")));
+        return userRepository;
+    }
+
     @Autowired
-    protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        //TODO get rid of this and add userDetailsService for authorization
-        auth.inMemoryAuthentication().withUser("user").password(passwordEncoder().encode("password")).roles("USER");
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService);
     }
 }

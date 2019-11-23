@@ -1,35 +1,39 @@
 package com.damnteam.letmechat.service;
 
-import com.damnteam.letmechat.data.*;
+import com.damnteam.letmechat.data.User;
+import com.damnteam.letmechat.data.UserRepository;
 import com.damnteam.letmechat.dto.UserDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.damnteam.letmechat.error.LoginAlreadyTakenException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private UserDataService userDataService;
+    private final UserDataService userDataService;
+
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserDataService userDataService) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.userDataService = userDataService;
+    }
 
     public boolean loginExists(String login) {
         return userRepository.findByLogin(login) != null;
     }
 
     public User createUserFromDTO(UserDTO userDTO) throws Exception {
-        if(loginExists(userDTO.getLogin())) {
-            throw new Exception("User with this login already exists");
+        if (loginExists(userDTO.getLogin())) {
+            throw new LoginAlreadyTakenException();
         }
         var user = new User();
         user.setLogin(userDTO.getLogin());
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        user.setUserData(userDataService.createUserDataFromDTO(userDTO,user));
+        user.setUserData(userDataService.createUserDataFromDTO(userDTO, user));
         return userRepository.save(user);
     }
 }

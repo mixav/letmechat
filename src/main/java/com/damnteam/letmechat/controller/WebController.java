@@ -38,7 +38,6 @@ public class WebController {
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
     @ResponseBody
     public GenericResponse registration(@Valid UserDTO userDTO) throws Exception {
-//        TODO add registration processing
         userService.createUserFromDTO(userDTO);
         return new GenericResponse("success");
     }
