@@ -1,18 +1,16 @@
-package com.damnteam.letmechat.webapp;
+package com.damnteam.letmechat.controller;
 
 import com.damnteam.letmechat.data.User;
-import com.damnteam.letmechat.data.UserDTO;
+import com.damnteam.letmechat.dto.UserDTO;
 import com.damnteam.letmechat.data.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.damnteam.letmechat.service.UserService;
+import com.damnteam.letmechat.util.GenericResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
 import java.util.Optional;
@@ -21,8 +19,14 @@ import java.util.Optional;
 @Controller
 public class WebController {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    private final UserService userService;
+
+    public WebController(UserRepository userRepository, UserService userService) {
+        this.userRepository = userRepository;
+        this.userService = userService;
+    }
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public String registration(Model model) {
@@ -32,14 +36,11 @@ public class WebController {
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
-    public ModelAndView registration(@Valid UserDTO user,
-                                     BindingResult result, WebRequest request, Errors errors) {
-        if (userRepository.findByLogin(user.getLogin()) != null)
-            if (!result.hasErrors()) {
-
-            }
+    @ResponseBody
+    public GenericResponse registration(@Valid UserDTO userDTO) throws Exception {
 //        TODO add registration processing
-        return new ModelAndView("registration", "user", user);
+        userService.createUserFromDTO(userDTO);
+        return new GenericResponse("success");
     }
 
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)

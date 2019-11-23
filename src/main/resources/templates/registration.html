@@ -8,7 +8,7 @@
 <body>
 <div class="container-fluid">
     <h1 th:text="#{label.form.title}"></h1>
-    <form action="/" th:object="${user}" method="POST" enctype="utf8">
+    <form th:id="registration" action="/" th:object="${user}" method="POST" enctype="utf8">
         <div class="row justify-content-start">
             <div class="col" style="max-width: max-content">
                 <label class="row no-gutters" th:text="#{label.user.login}">login</label>
@@ -43,7 +43,7 @@
     var serverContext = [[@{/}]];
 
         $(document).ready(function () {
-            $('form').submit(function (event) {
+            $('#registration').submit(function (event) {
                 register(event);
             });
 

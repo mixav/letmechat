@@ -1,6 +1,6 @@
 package com.damnteam.letmechat.validator;
 
-import com.damnteam.letmechat.data.UserDTO;
+import com.damnteam.letmechat.dto.UserDTO;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

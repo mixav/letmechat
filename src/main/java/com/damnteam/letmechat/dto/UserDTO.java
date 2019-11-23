@@ -1,4 +1,4 @@
-package com.damnteam.letmechat.data;
+package com.damnteam.letmechat.dto;
 
 import com.damnteam.letmechat.validator.PasswordsMatch;
 import lombok.Getter;
