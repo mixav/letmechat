@@ -16,6 +16,11 @@
             <button type="submit" th:text="#{label.form.register}">submit</button>
         </form>
     </div>
+    <div sec:authorize="isAuthenticated()">
+        <form action="/logout">
+            <input type="submit" value="Log out"/>
+        </form>
+    </div>
 </header>
 <body>
 </body>

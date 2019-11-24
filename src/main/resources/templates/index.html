@@ -17,10 +17,5 @@
 <div sec:authorize="hasRole('USER')">
     This content is only shown to users.
 </div>
-<div sec:authorize="isAuthenticated()">
-    <form action="/logout">
-        <input type="submit" value="Log out"/>
-    </form>
-</div>
 </body>
 </html>
