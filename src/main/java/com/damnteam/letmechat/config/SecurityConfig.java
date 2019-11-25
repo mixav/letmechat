@@ -27,6 +27,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
+//                .headers().frameOptions().sameOrigin().and()   for h2 console
                 .authorizeRequests()
                 .antMatchers("/static/**", "/favicon.ico").permitAll()
                 .antMatchers("/", "/index").permitAll()
