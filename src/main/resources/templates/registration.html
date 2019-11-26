@@ -18,13 +18,13 @@
                 <label class="row no-gutters" th:text="#{label.user.confirmPass}">confirm</label>
             </div>
             <div class="col" style="max-width: max-content">
-                <input th:field="*{login}" required th:maxlength="15"/>
+                <input th:field="*{login}" required th:minlength="4" th:maxlength="15"/>
                 <div class="w-100"></div>
                 <input th:field="*{firstName}" required/>
                 <div class="w-100"></div>
                 <input th:field="*{lastName}" required/>
                 <div class="w-100"></div>
-                <input type="password" th:field="*{password}" required/>
+                <input type="password" th:minlength="8" th:field="*{password}" required/>
                 <div class="w-100"></div>
                 <input type="password" th:field="*{matchingPassword}" required/>
             </div>
