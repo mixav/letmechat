@@ -1,44 +1,37 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/header :: header">
-    <meta charset="UTF-8">
+<head>
     <title>Registration page</title>
+    <div th:replace="fragments/header :: header(title='Registration page')"></div>
 </head>
-<body>
-<div class="container-fluid">
-    <h1 th:text="#{label.form.title}"></h1>
-    <form th:id="registration" action="/" th:object="${user}" method="POST" enctype="utf8">
-        <div class="row justify-content-start">
-            <div class="col" style="max-width: max-content">
-                <label class="row no-gutters" th:text="#{label.user.login}">login</label>
-                <label class="row no-gutters" th:text="#{label.user.firstName}">firstNane</label>
-                <label class="row no-gutters" th:text="#{label.user.lastName}">lastName</label>
-                <label class="row no-gutters" th:text="#{label.user.password}">password</label>
-                <label class="row no-gutters" th:text="#{label.user.confirmPass}">confirm</label>
-            </div>
-            <div class="col" style="max-width: max-content">
-                <input th:field="*{login}" required th:minlength="4" th:maxlength="15"/>
-                <div class="w-100"></div>
-                <input th:field="*{firstName}" required/>
-                <div class="w-100"></div>
-                <input th:field="*{lastName}" required/>
-                <div class="w-100"></div>
-                <input type="password" th:minlength="8" th:field="*{password}" required/>
-                <div class="w-100"></div>
-                <input type="password" th:field="*{matchingPassword}" required/>
-            </div>
-            <div class="col">
-                <span id="loginError" style="display:none"></span>
-                <span id="firstNameError" style="display:none"></span>
-                <span id="lastNameError" style="display:none"></span>
-                <span id="passwordError" style="display:none"></span>
-            </div>
-        </div>
-        <button type="submit" th:text="#{label.form.submit}">submit</button>
-        <span class="row alert-danger no-gutters" id="globalError" style="display:none; max-width: max-content"></span>
-    </form>
-</div>
+<body class="bg-light">
+<h1 th:text="#{label.form.title}"></h1>
+<form class="container-fluid" th:id="registration" action="/" th:object="${user}" method="POST" enctype="utf8">
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" th:text="#{label.user.login}">login</label>
+        <input class="col-sm-2" th:field="*{login}" required th:minlength="4" th:maxlength="15"/>
+        <span id="loginError" style="display:none"></span>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" th:text="#{label.user.firstName}">firstNane</label>
+        <input class="col-sm-2" th:field="*{firstName}" required/>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" th:text="#{label.user.lastName}">lastName</label>
+        <input class="col-sm-2" th:field="*{lastName}" required/>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" th:text="#{label.user.password}">password</label>
+        <input class="col-sm-2" type="password" th:minlength="8" th:field="*{password}" required/>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" th:text="#{label.user.confirmPass}">confirm</label>
+        <input class="col-sm-2" type="password" th:field="*{matchingPassword}" required/>
+    </div>
+    <button class="btn btn-dark" type="submit" th:text="#{label.form.submit}">submit</button>
+    <span class="row alert-danger no-gutters" id="globalError" style="display:none; max-width: max-content"></span>
+</form>
 <script th:inline="javascript">
     var serverContext = [[@{/}]];
 
@@ -93,6 +86,13 @@
                     }
                 });
         }
+
+
+
+
+
+
+
 
 
 </script>
