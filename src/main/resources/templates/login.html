@@ -7,14 +7,18 @@
     <title>Login page</title>
 </head>
 <body>
-<h1>Login page</h1>
-<p th:if="${loginError}" class="error">Wrong user or password</p>
-<form th:action="@{/perform_login}" method="post">
-    <label for="username">Username</label>:
-    <input type="text" id="username" name="username" autofocus="autofocus" /> <br />
-    <label for="password">Password</label>:
-    <input type="password" id="password" name="password" /> <br />
-    <input type="submit" value="Log in" />
+<form class="container" th:action="@{/perform_login}" method="post">
+    <h1>Login page</h1>
+    <p th:if="${loginError}" class="error">Wrong user or password</p>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" th:text="#{label.user.login}">login</label>
+        <input class="col-sm-2 form-control" name="username" value="" required/>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" th:text="#{label.user.password}">password</label>
+        <input class="col-sm-2 form-control" type="password" th:minlength="8" name="password" value="" required/>
+    </div>
+    <input class="btn btn-dark" type="submit" value="Log in" />
 </form>
 </body>
 </html>

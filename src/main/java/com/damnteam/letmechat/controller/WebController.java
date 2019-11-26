@@ -1,12 +1,11 @@
 package com.damnteam.letmechat.controller;
 
 import com.damnteam.letmechat.data.User;
-import com.damnteam.letmechat.dto.UserDTO;
 import com.damnteam.letmechat.data.UserRepository;
+import com.damnteam.letmechat.dto.UserDTO;
 import com.damnteam.letmechat.service.UserService;
 import com.damnteam.letmechat.util.GenericResponse;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,14 +27,7 @@ public class WebController {
         this.userService = userService;
     }
 
-    @RequestMapping(value = "/registration", method = RequestMethod.GET)
-    public String registration(Model model) {
-        UserDTO userDTO = new UserDTO();
-        model.addAttribute("user", userDTO);
-        return "registration";
-    }
-
-    @RequestMapping(value = "/registration", method = RequestMethod.POST)
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ResponseBody
     public GenericResponse registration(@Valid UserDTO userDTO) throws Exception {
         userService.createUserFromDTO(userDTO);
