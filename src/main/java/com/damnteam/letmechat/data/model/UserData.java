@@ -12,15 +12,15 @@ public class UserData {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
+    private Long id;
 
     @Column(nullable = false)
-    public String firstName;
+    private String firstName;
 
     @Column(nullable = false)
-    public String lastName;
+    private String lastName;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "userId", referencedColumnName = "id")
-    public User user;
+    private User user;
 }

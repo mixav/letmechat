@@ -2,51 +2,72 @@ package com.damnteam.letmechat.data;
 
 import com.damnteam.letmechat.data.dao.PrivilegeRepository;
 import com.damnteam.letmechat.data.dao.RoleRepository;
+import com.damnteam.letmechat.data.dao.UserDataRepository;
 import com.damnteam.letmechat.data.dao.UserRepository;
 import com.damnteam.letmechat.data.model.Privilege;
 import com.damnteam.letmechat.data.model.Role;
 import com.damnteam.letmechat.data.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.damnteam.letmechat.data.model.UserData;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
+import java.util.Collections;
 
 @Component
 public class DataInitializer implements ApplicationListener<ApplicationReadyEvent> {
 
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private PrivilegeRepository privilegeRepository;
+    private final PrivilegeRepository privilegeRepository;
 
-    @Autowired
-    private RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
+
+    private final UserDataRepository userDataRepository;
+
+    public DataInitializer(UserRepository userRepository, PrivilegeRepository privilegeRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, UserDataRepository userDataRepository) {
+        this.userRepository = userRepository;
+        this.privilegeRepository = privilegeRepository;
+        this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.userDataRepository = userDataRepository;
+    }
 
     @Override
     @EventListener
+    @Transactional
     public void onApplicationEvent(final ApplicationReadyEvent event) {
-        if (userRepository.findByLogin("user") == null) {
-            userRepository.save(new User("user", passwordEncoder.encode("password")));
-        }
-        if (privilegeRepository.findByName("ALL") == null) {
+        if (privilegeRepository.findByName("ROLE_USER") == null) {
             var privilege = new Privilege();
-            privilege.setName("ALL");
+            privilege.setName("ROLE_USER");
             privilegeRepository.save(privilege);
         }
         if (roleRepository.findByName("USER") == null) {
             var role = new Role();
             role.setName("USER");
-            role.setPrivileges(Arrays.asList(privilegeRepository.findByName("ALL")));
+            role.setPrivileges(Collections.singletonList(privilegeRepository.findByName("ROLE_USER")));
             roleRepository.save(role);
+        }
+        User user = userRepository.findByLogin("user");
+        if (user == null) {
+            user = new User();
+            user.setLogin("user");
+            user.setPassword(passwordEncoder.encode("password"));
+            user.setRoles(Collections.singletonList(roleRepository.findByName("USER")));
+            userRepository.save(user);
+        }
+        if (userDataRepository.findByUser(user) == null) {
+            UserData userData = new UserData();
+            userData.setFirstName("admin");
+            userData.setLastName("admin");
+            userData.setUser(user);
+            userDataRepository.save(userData);
         }
     }
 }

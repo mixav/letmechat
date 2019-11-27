@@ -23,12 +23,13 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    public User(String login, String password) {
-        this.login = login;
-        this.password = password;
-    }
-
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(
+                    name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
 
     @OneToOne(mappedBy = "user")

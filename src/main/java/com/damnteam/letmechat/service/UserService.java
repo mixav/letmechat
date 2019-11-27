@@ -7,9 +7,9 @@ import com.damnteam.letmechat.data.model.User;
 import com.damnteam.letmechat.error.LoginAlreadyTakenException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collections;
 
 @Service
@@ -44,7 +44,7 @@ public class UserService {
         user.setLogin(userDTO.getLogin());
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         user.setUserData(userDataService.createUserDataFromDTO(userDTO, user));
-        user.setRoles(Collections.singletonList(roleRepository.findByName("USER")));
+        user.setRoles(new ArrayList<>(Collections.singleton(roleRepository.findByName("ROLE_USER"))));
         return userRepository.save(user);
     }
 }
