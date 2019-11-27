@@ -1,7 +1,5 @@
 package com.damnteam.letmechat.config;
 
-import com.damnteam.letmechat.data.model.User;
-import com.damnteam.letmechat.data.dao.UserRepository;
 import com.damnteam.letmechat.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -27,12 +25,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-//                .headers().frameOptions().sameOrigin().and()   for h2 console
+                .headers().frameOptions().sameOrigin().and()
                 .authorizeRequests()
                 .antMatchers("/static/**", "/favicon.ico").permitAll()
                 .antMatchers("/", "/index").permitAll()
-                .antMatchers("/registration","/register").not().authenticated()
-                .anyRequest().authenticated()
+                .antMatchers("/registration", "/register").not().authenticated()
+                .anyRequest().permitAll()
                 .and()
                 .formLogin()
                 .loginPage("/login")
@@ -50,13 +48,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     protected PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public UserRepository initData(UserRepository userRepository) {
-        //TODO put data from bd to file for persistence
-        userRepository.save(new User("user", new BCryptPasswordEncoder().encode("password")));
-        return userRepository;
     }
 
     @Autowired

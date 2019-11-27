@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Getter
@@ -16,7 +17,9 @@ public class Privilege {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String privilege;
+    @Column(unique = true, nullable = false)
+    private String name;
 
+    @ManyToMany(mappedBy = "privileges")
+    private Collection<Role> roles;
 }

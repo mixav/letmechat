@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @NoArgsConstructor
 @Getter
@@ -27,13 +28,9 @@ public class User {
         this.password = password;
     }
 
-    @Override
-    public String toString() {
-        return String.format(
-                "User[id=%d, login='%s']",
-                id, login);
-    }
+    @ManyToMany(mappedBy = "users")
+    private Collection<Role> roles;
 
-    @OneToOne
+    @OneToOne(mappedBy = "user")
     private UserData userData;
 }
