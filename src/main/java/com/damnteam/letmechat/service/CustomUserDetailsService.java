@@ -1,6 +1,6 @@
 package com.damnteam.letmechat.service;
 
-import com.damnteam.letmechat.data.UserRepository;
+import com.damnteam.letmechat.data.dao.UserRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;

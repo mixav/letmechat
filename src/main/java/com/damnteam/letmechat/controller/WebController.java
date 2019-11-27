@@ -1,8 +1,8 @@
 package com.damnteam.letmechat.controller;
 
-import com.damnteam.letmechat.data.User;
-import com.damnteam.letmechat.data.UserRepository;
-import com.damnteam.letmechat.dto.UserDTO;
+import com.damnteam.letmechat.data.model.User;
+import com.damnteam.letmechat.data.dao.UserRepository;
+import com.damnteam.letmechat.data.dto.UserDTO;
 import com.damnteam.letmechat.service.UserService;
 import com.damnteam.letmechat.util.GenericResponse;
 import org.springframework.stereotype.Controller;

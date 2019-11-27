@@ -1,8 +1,8 @@
 package com.damnteam.letmechat.service;
 
-import com.damnteam.letmechat.data.User;
-import com.damnteam.letmechat.data.UserRepository;
-import com.damnteam.letmechat.dto.UserDTO;
+import com.damnteam.letmechat.data.model.User;
+import com.damnteam.letmechat.data.dao.UserRepository;
+import com.damnteam.letmechat.data.dto.UserDTO;
 import com.damnteam.letmechat.error.LoginAlreadyTakenException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

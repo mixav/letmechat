@@ -1,7 +1,7 @@
 package com.damnteam.letmechat.config;
 
-import com.damnteam.letmechat.data.User;
-import com.damnteam.letmechat.data.UserRepository;
+import com.damnteam.letmechat.data.model.User;
+import com.damnteam.letmechat.data.dao.UserRepository;
 import com.damnteam.letmechat.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
