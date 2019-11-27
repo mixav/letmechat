@@ -7,6 +7,8 @@ import com.damnteam.letmechat.error.LoginAlreadyTakenException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
 public class UserService {
 
@@ -22,10 +24,12 @@ public class UserService {
         this.userDataService = userDataService;
     }
 
+    @Transactional
     public boolean loginExists(String login) {
         return userRepository.findByLogin(login) != null;
     }
 
+    @Transactional
     public User createUserFromDTO(UserDTO userDTO) throws Exception {
         if (loginExists(userDTO.getLogin())) {
             throw new LoginAlreadyTakenException();
