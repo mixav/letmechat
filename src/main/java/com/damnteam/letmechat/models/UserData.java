@@ -16,11 +16,14 @@ import javax.persistence.JoinColumn;
 @Entity
 public class UserData {
 
-    @Column
+    @Column(nullable = false)
     private String firstName;
 
-    @Column
+    @Column(nullable = false)
     private String lastName;
+
+    @Column(nullable = false, unique = true)
+    private String emailAddress;
 
     @JoinColumn(name = "id", referencedColumnName = "id")
     private User user;
