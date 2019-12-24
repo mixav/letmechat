@@ -1,12 +1,17 @@
 package com.damnteam.letmechat.controllers;
 
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+@Controller
 public class WebController {
-
-    @GetMapping("/login")
-    public String login(Model model) {
-        return "login";
+    @RequestMapping(value="/registration", method = RequestMethod.POST)
+    @ResponseBody
+    public String registration(Object userDataFromJs) throws Exception {
+        return "signUp";
     }
 }
+
+
