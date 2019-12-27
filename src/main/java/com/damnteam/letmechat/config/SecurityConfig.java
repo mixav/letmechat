@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/static/**", "/favicon.ico").permitAll()
                 .antMatchers("/", "/index").permitAll()
                 .antMatchers("/registration", "/register").not().authenticated()
-                .anyRequest().permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login")

@@ -1,8 +1,11 @@
 package com.damnteam.letmechat.controller;
 
+import com.damnteam.letmechat.data.GenericMessage;
 import com.damnteam.letmechat.data.dto.UserDTO;
 import com.damnteam.letmechat.service.UserService;
 import com.damnteam.letmechat.util.GenericResponse;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,4 +30,9 @@ public class WebController {
         return new GenericResponse("success");
     }
 
+    @MessageMapping("/hello")
+    @SendTo("/topic/greetings")
+    public GenericMessage genericMessage() {
+        return new GenericMessage("user", "message");
+    }
 }

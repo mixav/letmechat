@@ -1,21 +1,32 @@
 package com.damnteam.letmechat.config;
 
-import com.damnteam.letmechat.service.CustomMessageHandler;
-import org.springframework.context.annotation.Bean;
-import org.springframework.web.socket.WebSocketHandler;
-import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
-import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
+//import com.damnteam.letmechat.service.CustomMessageHandler;
 
-public class WebSocketConfig implements WebSocketConfigurer {
+import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
+import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
+import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
-    @Bean
-    public WebSocketHandler customMessageHandler() {
-        return new CustomMessageHandler();
+@Configuration
+@EnableWebSocketMessageBroker
+public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
+//    @Bean
+//    public WebSocketHandler customMessageHandler() {
+//        return new CustomMessageHandler();
+//    }
+
+
+    @Override
+    public void configureMessageBroker(MessageBrokerRegistry registry) {
+        registry.enableSimpleBroker("/topic");
+        registry.setApplicationDestinationPrefixes("/app");
     }
 
     @Override
-    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(customMessageHandler(), "/myHandler");
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint("/gs-guide-websocket").withSockJS();
     }
 
 }

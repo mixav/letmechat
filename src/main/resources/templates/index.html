@@ -3,9 +3,10 @@
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<head th:replace="fragments/header :: header">
+<head>
     <meta charset="UTF-8">
     <title>Test application</title>
+    <div th:replace="fragments/header :: header"></div>
 </head>
 <body>
 <div sec:authorize="isAuthenticated()">
