@@ -8,17 +8,15 @@
     <script src="/stomp/app.js"></script>
 </head>
 <body>
-<div id="main-content" class="container d-flex">
-    <div>
-        <form class="form-inline">
-            <div class="form-group">
-                <button id="connect" class="btn btn-default" type="submit">Connect</button>
-                <button id="disconnect" class="btn btn-default" type="submit" disabled>Disconnect</button>
-            </div>
-        </form>
-    </div>
-    <div class="modal-dialog-centered modal-dialog-scrollable">
-        <div class="col-md-12">
+<div id="main-content" class="container-fluid d-flex">
+    <form class="form-inline align-items-start border-right">
+        <div class="form-group">
+            <button id="connect" class="btn btn-default" type="submit">Connect</button>
+            <button id="disconnect" class="btn btn-default" type="submit" disabled>Disconnect</button>
+        </div>
+    </form>
+    <div class="flex-grow-1">
+        <div class="overflow-auto" style="height:calc(100vh - 136px);">
             <table id="conversation" class="table table-striped" style="display:none;">
                 <thead>
                 <tr>
@@ -29,11 +27,10 @@
                 </tbody>
             </table>
         </div>
-        <div class="align-items-end">
-            <form class="col form-inline">
-                <div class="form-group">
-                    <label for="name">What is your name?</label>
-                    <input type="text" id="name" class="form-control" placeholder="Your name here...">
+        <div class="modal-footer justify-content-start">
+            <form class="form-inline flex-grow-1">
+                <div class="form-group flex-grow-1">
+                    <input type="text" id="message" class="form-control flex-grow-1" placeholder="Your message here...">
                 </div>
                 <button id="send" class="btn btn-default" type="submit" disabled>Send</button>
             </form>
