@@ -7,20 +7,20 @@
     <script src="/stomp/stomp.min.js"></script>
     <script src="/stomp/app.js"></script>
 </head>
-<body>
+<body class="bg-dark text-white">
 <div id="main-content" class="container-fluid d-flex">
     <form class="form-inline align-items-start border-right">
         <div class="form-group">
-            <button id="connect" class="btn btn-default" type="submit">Connect</button>
-            <button id="disconnect" class="btn btn-default" type="submit" disabled>Disconnect</button>
+            <button id="connect" class="btn btn-dark" type="submit">Connect</button>
+            <button id="disconnect" class="btn btn-dark" type="submit" disabled>Disconnect</button>
         </div>
     </form>
     <div class="flex-grow-1">
         <div class="overflow-auto" style="height:calc(100vh - 136px);">
-            <table id="conversation" class="table table-striped" style="display:none;">
-                <thead>
+            <table id="conversation" class="table table-dark" style="display:none;">
+                <thead class="table-borderless">
                 <tr>
-                    <th>Greetings</th>
+                    <th class="sticky-top bg-dark">Greetings</th>
                 </tr>
                 </thead>
                 <tbody id="greetings">
@@ -32,7 +32,7 @@
                 <div class="form-group flex-grow-1">
                     <input type="text" id="message" class="form-control flex-grow-1" placeholder="Your message here...">
                 </div>
-                <button id="send" class="btn btn-default" type="submit" disabled>Send</button>
+                <button id="send" class="btn btn-dark" type="submit" disabled>Send</button>
             </form>
         </div>
     </div>
