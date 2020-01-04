@@ -24,7 +24,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(
@@ -33,12 +33,12 @@ public class User {
                     name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
     private UserData userData;
 
-    @OneToMany(mappedBy = "creator")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "creator")
     private List<Channel> createdChannels;
 
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner")
     private List<Channel> ownedChannels;
 }

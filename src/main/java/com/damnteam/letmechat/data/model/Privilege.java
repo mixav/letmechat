@@ -20,6 +20,6 @@ public class Privilege {
     @Column(unique = true, nullable = false)
     private String name;
 
-    @ManyToMany(mappedBy = "privileges")
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "privileges")
     private Collection<Role> roles;
 }

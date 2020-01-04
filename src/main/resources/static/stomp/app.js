@@ -1,8 +1,6 @@
 var stompClient = null;
 
 function setConnected(connected) {
-    $("#connect").prop("disabled", connected);
-    $("#disconnect").prop("disabled", !connected);
     $("#send").prop("disabled", !connected);
     if (connected) {
         $("#conversation").show();
@@ -10,7 +8,7 @@ function setConnected(connected) {
     else {
         $("#conversation").hide();
     }
-    $("#greetings").html("");
+    $("#pool").html("");
 }
 
 function connect() {
@@ -19,8 +17,12 @@ function connect() {
     stompClient.connect({}, function (frame) {
         setConnected(true);
         console.log('Connected: ' + frame);
-        stompClient.subscribe('/chat/greetings', function (greeting) {
-            showMessage(JSON.parse(greeting.body));
+        $.get('api/channels', function(data){
+            data.forEach( function(channel){
+                stompClient.subscribe('/chat/' + channel.id, function (response) {
+                     showMessage(JSON.parse(response.body));
+                });
+            })
         });
     });
 }
@@ -36,7 +38,7 @@ function disconnect() {
 function sendMessage() {
     var message = $("#message").val();
     if(message.length > 0){
-        stompClient.send("/app/receiver", {}, JSON.stringify({'message': message}));
+        stompClient.send("/app/receiver/1", {}, JSON.stringify({'message': message}));
         $("#message").val("");
     }
 }
@@ -49,8 +51,9 @@ $(function () {
     $("#main-content form").on('submit', function (e) {
         e.preventDefault();
     });
-    $( "#connect" ).click(function() { connect(); });
-    $( "#disconnect" ).click(function() { disconnect(); });
+    $("header form").on('submit', function (e) {
+            disconnect();
+    });
     $( "#send" ).click(function() { sendMessage(); });
     connect();
 });

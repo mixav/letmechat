@@ -20,7 +20,7 @@ public class UserData {
     @Column(nullable = false)
     private String lastName;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "userId", referencedColumnName = "id")
     private User user;
 }
