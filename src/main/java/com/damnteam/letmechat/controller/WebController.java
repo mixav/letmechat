@@ -6,6 +6,7 @@ import com.damnteam.letmechat.service.UserService;
 import com.damnteam.letmechat.util.GenericResponse;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,9 +31,9 @@ public class WebController {
         return new GenericResponse("success");
     }
 
-    @MessageMapping("/hello")
-    @SendTo("/topic/greetings")
-    public GenericMessage genericMessage() {
-        return new GenericMessage("user", "message");
+    @MessageMapping("/receiver")
+    @SendTo("/chat/greetings")
+    public GenericMessage genericMessage(GenericMessage genericMessage, Authentication authentication) {
+        return new GenericMessage(authentication.getName(), genericMessage.getMessage());
     }
 }
