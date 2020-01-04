@@ -4,5 +4,5 @@ import com.damnteam.letmechat.data.model.Privilege;
 import org.springframework.data.repository.CrudRepository;
 
 public interface PrivilegeRepository extends CrudRepository<Privilege, Long> {
-    public Privilege findByName(String name);
+    Privilege findByName(String name);
 }

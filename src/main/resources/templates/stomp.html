@@ -9,13 +9,18 @@
 </head>
 <body class="bg-dark text-white">
 <div id="main-content" class="container-fluid d-flex">
-    <form class="form-inline align-items-start border-right">
-        <div class="form-group">
-            <button id="connect" class="btn btn-dark" type="submit">Connect</button>
-            <button id="disconnect" class="btn btn-dark" type="submit" disabled>Disconnect</button>
-        </div>
+    <form class="form-inline align-items-start border-left col-sm-2">
+        <table id="channels" class="table table-dark">
+            <thead class="table-borderless">
+            <tr>
+                <th class="sticky-top bg-dark">Channels</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
     </form>
-    <div class="flex-grow-1">
+    <div class="flex-grow-1 border-left col">
         <div class="overflow-auto" style="height:calc(100vh - 136px);">
             <table id="conversation" class="table table-dark" style="display:none;">
                 <thead class="table-borderless">
@@ -35,6 +40,17 @@
                 <button id="send" class="btn btn-dark" type="submit" disabled>Send</button>
             </form>
         </div>
+    </div>
+    <div class="border-left col-sm-2 border-right">
+        <table id="users" class="table table-dark">
+            <thead class="table-borderless">
+            <tr>
+                <th class="sticky-top bg-dark">Users</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
     </div>
 </div>
 </body>

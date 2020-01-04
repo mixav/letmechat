@@ -1,13 +1,7 @@
 package com.damnteam.letmechat.data;
 
-import com.damnteam.letmechat.data.dao.PrivilegeRepository;
-import com.damnteam.letmechat.data.dao.RoleRepository;
-import com.damnteam.letmechat.data.dao.UserDataRepository;
-import com.damnteam.letmechat.data.dao.UserRepository;
-import com.damnteam.letmechat.data.model.Privilege;
-import com.damnteam.letmechat.data.model.Role;
-import com.damnteam.letmechat.data.model.User;
-import com.damnteam.letmechat.data.model.UserData;
+import com.damnteam.letmechat.data.dao.*;
+import com.damnteam.letmechat.data.model.*;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.EventListener;
@@ -31,43 +25,74 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
 
     private final UserDataRepository userDataRepository;
 
-    public DataInitializer(UserRepository userRepository, PrivilegeRepository privilegeRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, UserDataRepository userDataRepository) {
+    private final ChannelRepository channelRepository;
+
+    public DataInitializer(UserRepository userRepository, PrivilegeRepository privilegeRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, UserDataRepository userDataRepository, ChannelRepository channelRepository) {
         this.userRepository = userRepository;
         this.privilegeRepository = privilegeRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.userDataRepository = userDataRepository;
+        this.channelRepository = channelRepository;
     }
 
     @Override
     @EventListener
     @Transactional
     public void onApplicationEvent(final ApplicationReadyEvent event) {
-        if (privilegeRepository.findByName("ROLE_USER") == null) {
-            var privilege = new Privilege();
-            privilege.setName("ROLE_USER");
-            privilegeRepository.save(privilege);
-        }
-        if (roleRepository.findByName("USER") == null) {
-            var role = new Role();
-            role.setName("USER");
-            role.setPrivileges(Collections.singletonList(privilegeRepository.findByName("ROLE_USER")));
-            roleRepository.save(role);
-        }
+        createPrivilegeIfNotExists();
+        createRoleIfNotExists();
+        var user = createUserIfNotExists();
+        createUserDataIfNotExists(user);
+
+        createChannelIfNotExists(user);
+    }
+
+    private Channel createChannelIfNotExists(User user) {
+        var channel = channelRepository.findByName("Main");
+        if (channel != null) return channel;
+        channel = new Channel();
+        channel.setCreator(user);
+        channel.setOwner(user);
+        channel.setName("Main");
+        return channelRepository.save(channel);
+    }
+
+    private UserData createUserDataIfNotExists(User user) {
+        var userData = userDataRepository.findByUser(user);
+        if (userData != null)
+            return userData;
+        userData = new UserData();
+        userData.setFirstName("admin");
+        userData.setLastName("admin");
+        userData.setUser(user);
+        return userDataRepository.save(userData);
+    }
+
+    private User createUserIfNotExists() {
         User user = userRepository.findByLogin("user");
-        if (user == null) {
-            user = new User();
-            user.setLogin("user");
-            user.setPassword(passwordEncoder.encode("password"));
-            user.setRoles(Collections.singletonList(roleRepository.findByName("USER")));
-            userRepository.save(user);
-        }
-        if (userDataRepository.findByUser(user) == null) {
-            UserData userData = new UserData();
-            userData.setFirstName("admin");
-            userData.setLastName("admin");
-            userData.setUser(user);
-            userDataRepository.save(userData);
-        }
+        if (user != null) return user;
+        user = new User();
+        user.setLogin("user");
+        user.setPassword(passwordEncoder.encode("password"));
+        user.setRoles(Collections.singletonList(roleRepository.findByName("USER")));
+        return userRepository.save(user);
+    }
+
+    private Role createRoleIfNotExists() {
+        var role = roleRepository.findByName("USER");
+        if (role != null) return role;
+        role = new Role();
+        role.setName("USER");
+        role.setPrivileges(Collections.singletonList(privilegeRepository.findByName("ROLE_USER")));
+        return roleRepository.save(role);
+    }
+
+    private Privilege createPrivilegeIfNotExists() {
+        Privilege privilege = privilegeRepository.findByName("ROLE_USER");
+        if (privilege != null) return privilege;
+        privilege = new Privilege();
+        privilege.setName("ROLE_USER");
+        return privilegeRepository.save(privilege);
     }
 }

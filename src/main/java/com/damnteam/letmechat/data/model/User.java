@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -34,4 +35,10 @@ public class User {
 
     @OneToOne(mappedBy = "user")
     private UserData userData;
+
+    @OneToMany(mappedBy = "creator")
+    private List<Channel> createdChannels;
+
+    @OneToMany(mappedBy = "owner")
+    private List<Channel> ownedChannels;
 }
