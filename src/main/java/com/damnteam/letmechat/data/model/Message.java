@@ -22,6 +22,7 @@ public class Message {
     @JoinColumn(referencedColumnName = "id", name = "userId")
     private User user;
 
+    @Column(length = 3000)
     private String message;
 
     @ManyToOne(fetch = FetchType.LAZY)

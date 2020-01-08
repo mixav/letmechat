@@ -51,6 +51,20 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
             channel.setName("Main");
             channelRepository.save(channel);
         }
+        if (channelRepository.findByName("Add").isEmpty()) {
+            var channel = new Channel();
+            channel.setCreator(user);
+            channel.setOwner(user);
+            channel.setName("Add");
+            channelRepository.save(channel);
+        }
+        if (channelRepository.findByName("Sub").isEmpty()) {
+            var channel = new Channel();
+            channel.setCreator(user);
+            channel.setOwner(user);
+            channel.setName("Sub");
+            channelRepository.save(channel);
+        }
     }
 
     private void createUserDataIfNotExists(User user) {

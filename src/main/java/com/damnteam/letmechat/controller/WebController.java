@@ -1,9 +1,10 @@
 package com.damnteam.letmechat.controller;
 
-import com.damnteam.letmechat.data.dao.ChannelRepository;
+import com.damnteam.letmechat.data.constants.Privilege;
 import com.damnteam.letmechat.data.dto.ChannelDTO;
 import com.damnteam.letmechat.data.dto.GenericMessage;
 import com.damnteam.letmechat.data.dto.UserDTO;
+import com.damnteam.letmechat.service.ChannelService;
 import com.damnteam.letmechat.service.MessageService;
 import com.damnteam.letmechat.service.UserService;
 import com.damnteam.letmechat.util.GenericResponse;
@@ -11,14 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,7 +30,7 @@ public class WebController {
     private UserService userService;
 
     @Autowired
-    private ChannelRepository channelRepository;
+    private ChannelService channelService;
 
     @Autowired
     private MessageService messageService;
@@ -53,6 +53,12 @@ public class WebController {
     @ResponseBody
     public List<ChannelDTO> channels(Authentication authentication) {
         //TODO
-        return channelRepository.findAll().stream().map(ChannelDTO::new).collect(Collectors.toList());
+        return channelService.findAll().stream().map(ChannelDTO::new).collect(Collectors.toList());
+    }
+
+    @PostMapping("addChannel")
+    @Secured(Privilege.Constants.ROLE_USER)
+    public void addChannel(@NotNull String name) throws Exception {
+        channelService.create(name);
     }
 }
