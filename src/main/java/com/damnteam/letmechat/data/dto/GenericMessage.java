@@ -1,4 +1,4 @@
-package com.damnteam.letmechat.data;
+package com.damnteam.letmechat.data.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

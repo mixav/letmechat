@@ -4,6 +4,8 @@ import com.damnteam.letmechat.data.model.User;
 import com.damnteam.letmechat.data.model.UserData;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.Optional;
+
 public interface UserDataRepository extends CrudRepository<UserData, Long> {
-    UserData findByUser(User user);
+    Optional<UserData> findByUser(User user);
 }

@@ -1,8 +1,8 @@
 package com.damnteam.letmechat.service;
 
-import com.damnteam.letmechat.data.dao.UserRepository;
 import com.damnteam.letmechat.data.model.Privilege;
 import com.damnteam.letmechat.data.model.Role;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,19 +17,17 @@ import java.util.stream.Collectors;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final UserRepository userRepository;
-
-    public CustomUserDetailsService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    @Autowired
+    private UserService userService;
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-        var user = userRepository.findByLogin(login);
-        if (user == null) {
+        var optionalUser = userService.findByName(login);
+        if (optionalUser.isEmpty()) {
             throw new UsernameNotFoundException("No user found for login: " + login);
         }
+        var user = optionalUser.get();
         return new User(login,
                 user.getPassword(),
                 user.getRoles()

@@ -14,6 +14,6 @@ public class ChannelDTO {
     public ChannelDTO(Channel channel) {
         this.id = channel.getId();
         this.name = channel.getName();
-        this.owner = channel.getOwner().getLogin();
+        this.owner = channel.getOwner().getName();
     }
 }

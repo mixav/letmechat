@@ -1,4 +1,6 @@
 var stompClient = null;
+var activeChannel = null;
+var channels = [];
 
 function setConnected(connected) {
     $("#send").prop("disabled", !connected);
@@ -17,14 +19,13 @@ function connect() {
     stompClient.connect({}, function (frame) {
         setConnected(true);
         console.log('Connected: ' + frame);
-        $.get('api/channels', function(data){
-            data.forEach( function(channel){
-                stompClient.subscribe('/chat/' + channel.id, function (response) {
-                     showMessage(JSON.parse(response.body));
-                });
-            })
+        channels.forEach( function(channel){
+        stompClient.subscribe('/chat/' + channel, function (response) {
+             showMessage(JSON.parse(response.body));
         });
-    });
+        })
+        activeChannel = channels[0];
+        });
 }
 
 function disconnect() {
@@ -38,7 +39,7 @@ function disconnect() {
 function sendMessage() {
     var message = $("#message").val();
     if(message.length > 0){
-        stompClient.send("/app/receiver/1", {}, JSON.stringify({'message': message}));
+        stompClient.send("/app/receiver/" + activeChannel, {}, JSON.stringify({'message': message}));
         $("#message").val("");
     }
 }
@@ -48,12 +49,11 @@ function showMessage(content) {
 }
 
 $(function () {
-    $("#main-content form").on('submit', function (e) {
-        e.preventDefault();
-    });
-    $("header form").on('submit', function (e) {
-            disconnect();
-    });
+    $("#main-content form").on('submit', function (e) { e.preventDefault(); });
+    $("header form").on('submit', function (e) { disconnect(); });
     $( "#send" ).click(function() { sendMessage(); });
     connect();
+    $.get('api/channels', function(data){
+        channels = data.map(channel => channel.id);
+    })
 });

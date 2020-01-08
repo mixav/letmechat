@@ -1,11 +1,13 @@
 package com.damnteam.letmechat.controller;
 
-import com.damnteam.letmechat.data.GenericMessage;
 import com.damnteam.letmechat.data.dao.ChannelRepository;
 import com.damnteam.letmechat.data.dto.ChannelDTO;
+import com.damnteam.letmechat.data.dto.GenericMessage;
 import com.damnteam.letmechat.data.dto.UserDTO;
+import com.damnteam.letmechat.service.MessageService;
 import com.damnteam.letmechat.service.UserService;
 import com.damnteam.letmechat.util.GenericResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -24,14 +26,14 @@ import java.util.stream.Collectors;
 @Controller
 public class WebController {
 
-    private final UserService userService;
+    @Autowired
+    private UserService userService;
 
-    private final ChannelRepository channelRepository;
+    @Autowired
+    private ChannelRepository channelRepository;
 
-    public WebController(UserService userService, ChannelRepository channelRepository) {
-        this.userService = userService;
-        this.channelRepository = channelRepository;
-    }
+    @Autowired
+    private MessageService messageService;
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ResponseBody
@@ -40,16 +42,17 @@ public class WebController {
         return new GenericResponse("success");
     }
 
-    @MessageMapping("/receiver/{id}")
-    @SendTo("/chat/{id}")
-    public GenericMessage genericMessage(GenericMessage genericMessage, Authentication authentication, @DestinationVariable Long id) {
-        return new GenericMessage(authentication.getName(), genericMessage.getMessage());
+    @MessageMapping("/receiver/{channelId}")
+    @SendTo("/chat/{channelId}")
+    public GenericMessage genericMessage(GenericMessage message, Authentication auth, @DestinationVariable Long channelId) throws Exception {
+        messageService.persistMessageOutDTO(message.getMessage(), auth.getName(), channelId);
+        return new GenericMessage(auth.getName(), message.getMessage());
     }
 
     @GetMapping("api/channels")
     @ResponseBody
     public List<ChannelDTO> channels(Authentication authentication) {
-
+        //TODO
         return channelRepository.findAll().stream().map(ChannelDTO::new).collect(Collectors.toList());
     }
 }

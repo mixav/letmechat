@@ -19,7 +19,7 @@ public class User {
     private Long id;
 
     @Column(unique = true, nullable = false)
-    private String login;
+    private String name;
 
     @Column(nullable = false)
     private String password;

@@ -4,17 +4,15 @@ import com.damnteam.letmechat.data.dao.UserDataRepository;
 import com.damnteam.letmechat.data.dto.UserDTO;
 import com.damnteam.letmechat.data.model.User;
 import com.damnteam.letmechat.data.model.UserData;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class UserDataService {
+public class UserDataService extends GenericService<UserData> {
 
-    private final UserDataRepository userDataRepository;
-
-    public UserDataService(UserDataRepository userDataRepository) {
-        this.userDataRepository = userDataRepository;
-    }
+    @Autowired
+    private UserDataRepository userDataRepository;
 
     @Transactional
     public UserData createUserDataFromDTO(UserDTO userDTO, User user) {
