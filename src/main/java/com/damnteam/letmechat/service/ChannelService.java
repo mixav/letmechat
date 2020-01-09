@@ -22,6 +22,8 @@ public class ChannelService extends GenericService<Channel> {
     }
 
     public Channel create(String name) throws Exception {
+        if(channelRepository.findByName(name).isPresent())
+            throw new Exception("Channel with that name already exists"); //TODO
         var channel = new Channel();
         var user = userService.findByName(SecurityContextHolder.getContext().getAuthentication().getName());
         if (user.isPresent()) {
@@ -29,6 +31,6 @@ public class ChannelService extends GenericService<Channel> {
             channel.setOwner(user.get());
             return save(channel);
         }
-        else throw new Exception("Wrong user credentials.");
+        else throw new Exception("Wrong user credentials."); //TODO
     }
 }

@@ -16,13 +16,17 @@ function setConnected(connected) {
 function connect() {
     var socket = new SockJS('/websocket');
     stompClient = Stomp.over(socket);
+    stompClient.reconnect_delay = 5000;
+//    stompClient.debug = function(str) {};
     stompClient.connect({}, function (frame) {
         setConnected(true);
         console.log('Connected: ' + frame);
         channels.forEach( function(channel){
             stompClient.subscribe('/chat/' + channel.id, function (response) {
-                 showMessage(JSON.parse(response.body));
-            });
+                if(parseInt(response.headers.subscription) === activeChannel.id)
+                    showMessage(JSON.parse(response.body));
+                    //TODO add informing about messages in nonactive channels
+            }, { id: channel.id });
             $("#channels tbody")
                 .append("<tr><td style=\"cursor:pointer;\" id="+ channel.id +">" + channel.name +"</td></tr>")
                 .click(changeChannel);
@@ -42,13 +46,15 @@ function disconnect() {
 function sendMessage() {
     var message = $("#message").val();
     if(message.length > 0){
-        stompClient.send("/app/receiver/" + activeChannel, {}, JSON.stringify({'message': message}));
+        stompClient.send("/app/receiver/" + activeChannel.id, {}, JSON.stringify({'message': message}));
         $("#message").val("");
     }
+    $("#message").focus();
 }
 
 function showMessage(content) {
     $("#pool").append("<tr><td>" + content.username + ": " + content.message + "</td></tr>");
+    $('div.overflow-auto').scrollTop($('div.overflow-auto').prop('scrollHeight'));
 }
 
 function setActiveChannel(channel) {
@@ -58,20 +64,18 @@ function setActiveChannel(channel) {
     activeChannel = channel;
     $('#'+activeChannel.id).addClass("font-weight-bold");
     $("#conversation th").html(activeChannel.name);
-    $("#pool").html("");
+    $("#pool").html("");//TODO show older messages
 }
 
 function changeChannel(e){
-    if(e.target.id && e.target.id != activeChannel.id){ // TODO
+    var clickedId = parseInt(e.target.id, 10);
+    if( clickedId !== activeChannel.id){
         var newActive = channels.find(
             channel => {
-            console.log(channel.id);
-            console.log(e.target.id);
-                return channel.id === e.target.id
+                return channel.id === clickedId;
             }
         )
         setActiveChannel(newActive);
-        console.log(newActive);
     }
 
 
