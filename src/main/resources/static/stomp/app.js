@@ -28,9 +28,9 @@ function connect() {
                     //TODO add informing about messages in nonactive channels
             }, { id: channel.id });
             $("#channels tbody")
-                .append("<tr><td style=\"cursor:pointer;\" id="+ channel.id +">" + channel.name +"</td></tr>")
-                .click(changeChannel);
+                .append("<tr><td style=\"cursor:pointer;\" id=ch"+ channel.id +">" + channel.name +"</td></tr>");
         })
+        $("#channels tbody").click(changeChannel);
         setActiveChannel(channels[0]);
     });
 }
@@ -52,33 +52,39 @@ function sendMessage() {
     $("#message").focus();
 }
 
+function clearTime(date) {
+    h = (date.getHours()<10?'0':'') + date.getHours(),
+    m = (date.getMinutes()<10?'0':'') + date.getMinutes();
+    return h + ':' + m;
+}
+
 function showMessage(content) {
-    $("#pool").append("<tr><td>" + content.username + ": " + content.message + "</td></tr>");
-    $('div.overflow-auto').scrollTop($('div.overflow-auto').prop('scrollHeight'));
+    var date = new Date(content.time);
+    $("#pool").append("<tr><td style=\"word-break:break-all;\">" + clearTime(date) + " " + content.username + ": " + content.message + "</td></tr>");
+    $('div.overflow-auto').scrollTop($('div.overflow-auto').prop('scrollHeight'));//TODO use id
 }
 
 function setActiveChannel(channel) {
 
     if(activeChannel != null)
-        $('#'+activeChannel.id).removeClass("font-weight-bold");
+        $('#ch'+activeChannel.id).removeClass("font-weight-bold");
     activeChannel = channel;
-    $('#'+activeChannel.id).addClass("font-weight-bold");
+    $('#ch'+activeChannel.id).addClass("font-weight-bold");
     $("#conversation th").html(activeChannel.name);
     $("#pool").html("");//TODO show older messages
 }
 
 function changeChannel(e){
-    var clickedId = parseInt(e.target.id, 10);
+    var clickedId = parseInt(e.target.id.match(/\d+/), 10);
     if( clickedId !== activeChannel.id){
         var newActive = channels.find(
             channel => {
                 return channel.id === clickedId;
             }
         )
-        setActiveChannel(newActive);
+        if(newActive)
+            setActiveChannel(newActive);
     }
-
-
 }
 
 $(function () {

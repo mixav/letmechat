@@ -45,8 +45,8 @@ public class WebController {
     @MessageMapping("/receiver/{channelId}")
     @SendTo("/chat/{channelId}")
     public GenericMessage genericMessage(GenericMessage message, Authentication auth, @DestinationVariable Long channelId) throws Exception {
-        messageService.persistMessageOutDTO(message.getMessage(), auth.getName(), channelId);
-        return new GenericMessage(auth.getName(), message.getMessage());
+        var savedMessage = messageService.persistMessageOutDTO(message.getMessage(), auth.getName(), channelId);
+        return new GenericMessage(savedMessage);
     }
 
     @GetMapping("api/channels")
