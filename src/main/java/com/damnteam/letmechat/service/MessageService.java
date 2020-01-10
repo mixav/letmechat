@@ -1,9 +1,9 @@
 package com.damnteam.letmechat.service;
 
 import com.damnteam.letmechat.data.dao.MessageRepository;
-import com.damnteam.letmechat.data.dto.GenericMessage;
 import com.damnteam.letmechat.data.model.Message;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,7 +38,16 @@ public class MessageService extends GenericService<Message> {
 
     public List<Message> findLastInChannel(Long channelId) throws Exception {
         var channel = channelService.findById(channelId);
-        if(channel.isEmpty()) throw new Exception("Channel not found");
-        return messageRepository.findByChannelOrderByTimeDesc(channel.get());
+        if (channel.isEmpty()) throw new Exception("Channel not found");
+        return messageRepository.findTop30ByChannelOrderByTimeDesc(channel.get());
+    }
+
+    public List<Message> findPrevInChannel(Long channelId, Long fromId) throws Exception {
+        var channel = channelService.findById(channelId);
+        if (channel.isEmpty()) throw new Exception("Channel not found"); //TODO
+        //TODO page size flexibility for better api experience
+        int page = (int) ((fromId - 1) / 50);
+        if (page > 0 && (fromId - 1) % 50 == 0) --page;
+        return messageRepository.findByChannel(channel.get(), PageRequest.of(page, 50));
     }
 }

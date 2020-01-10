@@ -68,4 +68,10 @@ public class WebController {
         return messageService.findLastInChannel(channelId).stream().map(GenericMessage::new).collect(Collectors.toList());
     }
 
+    @GetMapping("api/prev/{channelId}")
+    @ResponseBody
+    public List<GenericMessage> prevMessages(@PathVariable Long channelId, @RequestParam("id") Long fromId) throws Exception {
+        return messageService.findPrevInChannel(channelId, fromId).stream().map(GenericMessage::new).collect(Collectors.toList());
+    }
+
 }

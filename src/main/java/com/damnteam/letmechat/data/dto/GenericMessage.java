@@ -12,6 +12,8 @@ import lombok.Setter;
 @Setter
 public class GenericMessage {
 
+    Long id;
+
     String username;
 
     String message;
@@ -19,6 +21,7 @@ public class GenericMessage {
     String time;
 
     public GenericMessage(Message persistedMessage) {
+        this.id = persistedMessage.getId();
         this.username = persistedMessage.getUser().getName();
         this.message = persistedMessage.getMessage();
         this.time = persistedMessage.getTime().toString();
