@@ -3,14 +3,14 @@ var activeChannel = null;
 var channels = [];
 
 function setConnected(connected) {
-    $("#send").prop("disabled", !connected);
+    $('#send').prop('disabled', !connected);
     if (connected) {
-        $("#conversation").show();
+        $('#conversation').show();
     }
     else {
-        $("#conversation").hide();
+        $('#conversation').hide();
     }
-    $("#pool").html("");
+    $('#pool').html('');
 }
 
 function connect() {
@@ -27,10 +27,10 @@ function connect() {
                     showMessage(JSON.parse(response.body));
                     //TODO add informing about messages in nonactive channels
             }, { id: channel.id });
-            $("#channels tbody")
-                .append("<tr><td style=\"cursor:pointer;\" id=ch"+ channel.id +">" + channel.name +"</td></tr>");
+            $('#channels tbody')
+                .append('<tr><td style="cursor:pointer;" id=ch' + channel.id +'>' + channel.name + '</td></tr>');
         })
-        $("#channels tbody").click(changeChannel);
+        $('#channels tbody').click(changeChannel);
         setActiveChannel(channels[0]);
     });
 }
@@ -40,45 +40,33 @@ function disconnect() {
         stompClient.disconnect();
     }
     setConnected(false);
-    console.log("Disconnected");
+    console.log('Disconnected');
 }
 
 function sendMessage() {
-    var message = $("#message").val();
+    var message = $('#message').val();
     if(message.length > 0){
-        stompClient.send("/app/receiver/" + activeChannel.id, {}, JSON.stringify({'message': message}));
-        $("#message").val("");
+        stompClient.send('/app/receiver/' + activeChannel.id, {}, JSON.stringify({'message': message}));
+        $('#message').val('');
     }
-    $("#message").focus();
-}
-
-function clearTime(date) {
-    h = (date.getHours()<10?'0':'') + date.getHours(),
-    m = (date.getMinutes()<10?'0':'') + date.getMinutes();
-    return h + ':' + m;
+    $('#message').focus();
 }
 
 function showMessage(content) {
-    var date = new Date(content.time);
-    $("#pool").append("<tr><td style=\"word-break:break-all;\">" + clearTime(date) + " " + content.username + ": " + content.message + "</td></tr>");
+    $('#pool').append(getMessageElement(content));
     $('div.overflow-auto').scrollTop($('div.overflow-auto').prop('scrollHeight'));//TODO use id
 }
 
 function setActiveChannel(channel) {
     $.get('api/last/' + channel.id, function(data){
         if(activeChannel != null)
-            $('#ch'+activeChannel.id).removeClass("font-weight-bold");
+            $('#ch' + activeChannel.id).removeClass('font-weight-bold');
         activeChannel = channel;
-        $('#ch'+activeChannel.id).addClass("font-weight-bold");
-        $("#conversation th").html(activeChannel.name);
-        $("#pool").html("");
+        $('#ch' + activeChannel.id).addClass('font-weight-bold');
+        $('#conversation th').html(activeChannel.name);
+        $('#pool').html('');
         data.forEach(function(content){
-            var date = new Date(content.time);
-            $("#pool").prepend(
-                "<tr><td style=\"word-break:break-all;\">" +
-                clearTime(date) + " " + content.username + ": " + content.message +
-                "</td></tr>"
-            )}
+            $('#pool').prepend(getMessageElement(content))}
         )
         $('div.overflow-auto').scrollTop($('div.overflow-auto').prop('scrollHeight'));//TODO use id
     })
@@ -97,10 +85,22 @@ function changeChannel(e){
     }
 }
 
+function getMessageElement(content){
+    return  '<tr><td id=' + content.id + ' style="word-break:break-all;">' +
+            (content.time ? clearTime(new Date(content.time)) + ' ' : '') + content.username + ': ' + content.message +
+            '</td></tr>';
+}
+
+function clearTime(date) {
+    var h = (date.getHours() < 10 ? '0' : '') + date.getHours();
+    var m = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
+    return h + ':' + m;
+}
+
 $(function () {
-    $("#main-content form").on('submit', function (e) { e.preventDefault(); });
-    $("header form").on('submit', function (e) { disconnect(); });
-    $( "#send" ).click(sendMessage);
+    $('#main-content form').on('submit', function (e) { e.preventDefault(); });
+    $('header form').on('submit', disconnect());
+    $('#send').click(sendMessage);
     $.get('api/channels', function(data){
         channels = data;
         connect();

@@ -1,6 +1,5 @@
 package com.damnteam.letmechat.data.dao;
 
-import com.damnteam.letmechat.data.dto.GenericMessage;
 import com.damnteam.letmechat.data.model.Channel;
 import com.damnteam.letmechat.data.model.Message;
 import org.springframework.data.repository.CrudRepository;
