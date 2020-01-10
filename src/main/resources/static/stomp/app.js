@@ -65,13 +65,23 @@ function showMessage(content) {
 }
 
 function setActiveChannel(channel) {
-
-    if(activeChannel != null)
-        $('#ch'+activeChannel.id).removeClass("font-weight-bold");
-    activeChannel = channel;
-    $('#ch'+activeChannel.id).addClass("font-weight-bold");
-    $("#conversation th").html(activeChannel.name);
-    $("#pool").html("");//TODO show older messages
+    $.get('api/last/' + channel.id, function(data){
+        if(activeChannel != null)
+            $('#ch'+activeChannel.id).removeClass("font-weight-bold");
+        activeChannel = channel;
+        $('#ch'+activeChannel.id).addClass("font-weight-bold");
+        $("#conversation th").html(activeChannel.name);
+        $("#pool").html("");
+        data.forEach(function(content){
+            var date = new Date(content.time);
+            $("#pool").prepend(
+                "<tr><td style=\"word-break:break-all;\">" +
+                clearTime(date) + " " + content.username + ": " + content.message +
+                "</td></tr>"
+            )}
+        )
+        $('div.overflow-auto').scrollTop($('div.overflow-auto').prop('scrollHeight'));//TODO use id
+    })
 }
 
 function changeChannel(e){

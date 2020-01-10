@@ -57,8 +57,15 @@ public class WebController {
     }
 
     @PostMapping("addChannel")
-    @Secured(Privilege.Constants.ROLE_USER)
+    @Secured(Privilege.Constants.ROLE_USER)//TODO think about it
     public void addChannel(@NotNull String name) throws Exception {
         channelService.create(name);
     }
+
+    @GetMapping("api/last/{channelId}")
+    @ResponseBody
+    public List<GenericMessage> lastMessages(@PathVariable Long channelId) throws Exception {
+        return messageService.findLastInChannel(channelId).stream().map(GenericMessage::new).collect(Collectors.toList());
+    }
+
 }
