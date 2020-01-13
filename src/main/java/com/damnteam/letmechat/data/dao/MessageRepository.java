@@ -10,5 +10,5 @@ import java.util.List;
 public interface MessageRepository extends CrudRepository<Message, Long> {
     List<Message> findTop30ByChannelOrderByTimeDesc(Channel channelId);
 
-    List<Message> findByChannel(Channel channel, Pageable pageable);
+    List<Message> findByIdLessThanAndChannelOrderByIdDesc(Long fromId, Channel channel, Pageable pageable);
 }

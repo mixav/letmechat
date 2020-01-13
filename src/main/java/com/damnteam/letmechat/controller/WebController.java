@@ -57,7 +57,7 @@ public class WebController {
     }
 
     @PostMapping("addChannel")
-    @Secured(Privilege.Constants.ROLE_USER)//TODO think about it
+    @Secured(Privilege.Constants.ROLE_USER)//TODO
     public void addChannel(@NotNull String name) throws Exception {
         channelService.create(name);
     }
@@ -65,12 +65,14 @@ public class WebController {
     @GetMapping("api/last/{channelId}")
     @ResponseBody
     public List<GenericMessage> lastMessages(@PathVariable Long channelId) throws Exception {
+        //TODO availability only to channel subscribers
         return messageService.findLastInChannel(channelId).stream().map(GenericMessage::new).collect(Collectors.toList());
     }
 
     @GetMapping("api/prev/{channelId}")
     @ResponseBody
     public List<GenericMessage> prevMessages(@PathVariable Long channelId, @RequestParam("id") Long fromId) throws Exception {
+        //TODO availability only to channel subscribers
         return messageService.findPrevInChannel(channelId, fromId).stream().map(GenericMessage::new).collect(Collectors.toList());
     }
 

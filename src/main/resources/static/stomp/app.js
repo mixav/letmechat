@@ -110,7 +110,7 @@ $(function () {
             var messageId = $('#pool td').first().prop('id');
             if(!messageId) return;
             $.get('api/prev/' + activeChannel.id, { 'id': messageId }, function(data){
-                data.reverse().forEach(function(message){ //TODO consider usage of for loop for break availability
+                data.forEach(function(message){ //TODO consider usage of for loop for break availability
                     if(message.id < messageId)
                         $('#pool').prepend(getMessageElement(message));
                 })

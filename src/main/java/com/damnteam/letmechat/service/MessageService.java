@@ -46,8 +46,6 @@ public class MessageService extends GenericService<Message> {
         var channel = channelService.findById(channelId);
         if (channel.isEmpty()) throw new Exception("Channel not found"); //TODO
         //TODO page size flexibility for better api experience
-        int page = (int) ((fromId - 1) / 50);
-        if (page > 0 && (fromId - 1) % 50 == 0) --page;
-        return messageRepository.findByChannel(channel.get(), PageRequest.of(page, 50));
+        return messageRepository.findByIdLessThanAndChannelOrderByIdDesc(fromId,channel.get(),PageRequest.of(0, 50));
     }
 }
