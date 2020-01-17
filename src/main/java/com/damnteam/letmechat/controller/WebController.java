@@ -3,7 +3,7 @@ package com.damnteam.letmechat.controller;
 import com.damnteam.letmechat.data.constants.Privilege;
 import com.damnteam.letmechat.data.dto.ChannelDTO;
 import com.damnteam.letmechat.data.dto.GenericMessage;
-import com.damnteam.letmechat.data.dto.UserDTO;
+import com.damnteam.letmechat.data.dto.RegistrationDTO;
 import com.damnteam.letmechat.service.ChannelService;
 import com.damnteam.letmechat.service.MessageService;
 import com.damnteam.letmechat.service.UserService;
@@ -37,8 +37,8 @@ public class WebController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ResponseBody
-    public GenericResponse registration(@Valid UserDTO userDTO) throws Exception {
-        userService.createUserFromDTO(userDTO);
+    public GenericResponse registration(@Valid RegistrationDTO registrationDTO) throws Exception {
+        userService.createUserFromDTO(registrationDTO);
         return new GenericResponse("success");
     }
 
@@ -52,7 +52,7 @@ public class WebController {
     @GetMapping("api/channels")
     @ResponseBody
     public List<ChannelDTO> channels(Authentication authentication) {
-        //TODO
+        //TODO list of user subscriptions
         return channelService.findAll().stream().map(ChannelDTO::new).collect(Collectors.toList());
     }
 

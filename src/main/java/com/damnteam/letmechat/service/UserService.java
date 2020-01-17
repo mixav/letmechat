@@ -2,7 +2,7 @@ package com.damnteam.letmechat.service;
 
 import com.damnteam.letmechat.data.dao.RoleRepository;
 import com.damnteam.letmechat.data.dao.UserRepository;
-import com.damnteam.letmechat.data.dto.UserDTO;
+import com.damnteam.letmechat.data.dto.RegistrationDTO;
 import com.damnteam.letmechat.data.model.User;
 import com.damnteam.letmechat.error.LoginAlreadyTakenException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,14 +34,14 @@ public class UserService extends GenericService<User> {
     }
 
     @Transactional
-    public User createUserFromDTO(UserDTO userDTO) throws Exception {
-        if (loginExists(userDTO.getLogin())) {
+    public User createUserFromDTO(RegistrationDTO registrationDTO) throws Exception {
+        if (loginExists(registrationDTO.getLogin())) {
             throw new LoginAlreadyTakenException();
         }
         var user = new User();
-        user.setName(userDTO.getLogin());
-        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        user.setUserData(userDataService.createUserDataFromDTO(userDTO, user));
+        user.setName(registrationDTO.getLogin());
+        user.setPassword(passwordEncoder.encode(registrationDTO.getPassword()));
+        user.setUserData(userDataService.createUserDataFromDTO(registrationDTO, user));
         user.setRoles(new ArrayList<>(Collections.singleton(roleRepository.findByName("USER").get())));
         return userRepository.save(user);
     }

@@ -1,37 +1,27 @@
 package com.damnteam.letmechat.data.dto;
 
-import com.damnteam.letmechat.validator.PasswordsMatch;
+import com.damnteam.letmechat.data.model.User;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-@PasswordsMatch
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserDTO {
 
-    @NotNull
-    @NotEmpty
-    @Length(max = 10)
-    private String login;
+    private String name;
 
-    @NotNull
-    @NotEmpty
-    @Length(min = 8)
-    private String password;
-
-    @NotNull
-    @NotEmpty
-    private String matchingPassword;
-
-    @NotNull
-    @NotEmpty
     private String firstName;
 
-    @NotNull
-    @NotEmpty
     private String lastName;
+
+    public UserDTO(User user) {
+        this.name = user.getName();
+        this.firstName = user.getUserData().getFirstName();
+        this.lastName = user.getUserData().getLastName();
+    }
 }

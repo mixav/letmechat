@@ -86,9 +86,21 @@ function changeChannel(e){
 }
 
 function getMessageElement(content){
-    return  '<tr><td id=' + content.id + ' style="word-break:break-all;">' +
-            (content.time ? clearTime(new Date(content.time)) + ' ' : '') + content.username + ': ' + content.message +
+    return  '<tr><td id=' + content.id + ' class="row mx-0 p-2">' +
+            getUserElement(content.username) +
+            '<span class="col-sm-11 p-0 text-break">' + content.message + '</span>'+
+            (content.time ? getTimeElement(new Date(content.time)): '') +
             '</td></tr>';
+}
+
+function getTimeElement(time){
+    var date = new Date(time);
+    return '<sup class="mt-auto ml-auto text-secondary" data-toggle="tooltip" data-placement="top" title="' + date.toLocaleDateString() + '">' +
+           clearTime(date) + '</sup>';
+}
+
+function getUserElement(username){
+    return '<a href="/user/' + username + '" class="col-sm-1 p-0 text-decoration-none text-warning font-weight-bold text-truncate">' + username + '</a>';
 }
 
 function clearTime(date) {

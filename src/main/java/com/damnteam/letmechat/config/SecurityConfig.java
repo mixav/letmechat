@@ -27,7 +27,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/static/**", "/favicon.ico").permitAll()
                 .antMatchers("/", "/index").permitAll()
-                .antMatchers("/registration", "/register").not().authenticated()
+                .antMatchers("/registration*", "/register").not().authenticated()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

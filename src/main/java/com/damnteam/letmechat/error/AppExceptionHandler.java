@@ -26,7 +26,13 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({Exception.class})
     public ResponseEntity<Object> handleCommonException(final Exception ex, final WebRequest request) {
-        final GenericResponse genericResponse = new GenericResponse(messageSource.getMessage("error.message", null, request.getLocale()), "Internal Error");
+        String message;
+        if (ex.getMessage() != null) {
+            message = ex.getMessage();
+        } else {
+            message = messageSource.getMessage("error.message", null, request.getLocale());
+        }
+        final GenericResponse genericResponse = new GenericResponse(message, "Internal Error");
         return new ResponseEntity<>(genericResponse, HttpStatus.I_AM_A_TEAPOT);
     }
 }

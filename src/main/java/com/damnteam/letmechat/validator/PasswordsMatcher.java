@@ -1,11 +1,11 @@
 package com.damnteam.letmechat.validator;
 
-import com.damnteam.letmechat.data.dto.UserDTO;
+import com.damnteam.letmechat.data.dto.RegistrationDTO;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class PasswordsMatcher implements ConstraintValidator<PasswordsMatch, UserDTO> {
+public class PasswordsMatcher implements ConstraintValidator<PasswordsMatch, RegistrationDTO> {
 
     @Override
     public void initialize(PasswordsMatch constraintAnnotation) {
@@ -13,7 +13,7 @@ public class PasswordsMatcher implements ConstraintValidator<PasswordsMatch, Use
     }
 
     @Override
-    public boolean isValid(UserDTO value, ConstraintValidatorContext context) {
+    public boolean isValid(RegistrationDTO value, ConstraintValidatorContext context) {
         return value.getPassword().equals(value.getMatchingPassword());
     }
 }

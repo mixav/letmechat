@@ -1,7 +1,7 @@
 package com.damnteam.letmechat.service;
 
 import com.damnteam.letmechat.data.dao.UserDataRepository;
-import com.damnteam.letmechat.data.dto.UserDTO;
+import com.damnteam.letmechat.data.dto.RegistrationDTO;
 import com.damnteam.letmechat.data.model.User;
 import com.damnteam.letmechat.data.model.UserData;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +15,10 @@ public class UserDataService extends GenericService<UserData> {
     private UserDataRepository userDataRepository;
 
     @Transactional
-    public UserData createUserDataFromDTO(UserDTO userDTO, User user) {
+    public UserData createUserDataFromDTO(RegistrationDTO registrationDTO, User user) {
         var userData = new UserData();
-        userData.setFirstName(userDTO.getFirstName());
-        userData.setLastName(userDTO.getLastName());
+        userData.setFirstName(registrationDTO.getFirstName());
+        userData.setLastName(registrationDTO.getLastName());
         userData.setUser(user);
         return userDataRepository.save(userData);
     }
