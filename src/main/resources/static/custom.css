@@ -1,0 +1,11 @@
+.message-time{
+    font-size: 75%;
+    bottom: -.1em;
+    line-height: 0;
+}
+
+.message-user{
+    top: -.6em;
+    line-height:16px;
+    height:16px;
+}

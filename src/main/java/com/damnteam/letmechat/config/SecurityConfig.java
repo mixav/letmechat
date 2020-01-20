@@ -1,5 +1,7 @@
 package com.damnteam.letmechat.config;
 
+import com.damnteam.letmechat.handler.CustomSuccessAuthenticationHandler;
+import com.damnteam.letmechat.handler.CustomSuccessLogoutHandler;
 import com.damnteam.letmechat.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +13,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -32,11 +36,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/login")
-                .loginProcessingUrl("/perform_login").defaultSuccessUrl("/", true)
+                .loginProcessingUrl("/perform_login")
+                .successHandler(customSuccessAuthenticationHandler())
                 .failureUrl("/login?error").permitAll()
                 .and()
                 .logout()
                 .logoutUrl("/logout")
+                .logoutSuccessHandler(customSuccessLogoutHandler())
                 .deleteCookies("JSESSIONID")
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
@@ -46,6 +52,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     protected PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler customSuccessAuthenticationHandler() {
+        return new CustomSuccessAuthenticationHandler();
+    }
+
+    @Bean
+    public LogoutSuccessHandler customSuccessLogoutHandler() {
+        return new CustomSuccessLogoutHandler();
     }
 
     @Bean

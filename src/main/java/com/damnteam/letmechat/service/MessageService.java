@@ -38,7 +38,7 @@ public class MessageService extends GenericService<Message> {
 
     public List<Message> findLastInChannel(Long channelId) throws Exception {
         var channel = channelService.findById(channelId);
-        if (channel.isEmpty()) throw new Exception("Channel not found");
+        if (channel.isEmpty()) throw new Exception("Channel not found"); //TODO
         return messageRepository.findTop30ByChannelOrderByTimeDesc(channel.get());
     }
 
@@ -46,6 +46,6 @@ public class MessageService extends GenericService<Message> {
         var channel = channelService.findById(channelId);
         if (channel.isEmpty()) throw new Exception("Channel not found"); //TODO
         //TODO page size flexibility for better api experience
-        return messageRepository.findByIdLessThanAndChannelOrderByIdDesc(fromId,channel.get(),PageRequest.of(0, 50));
+        return messageRepository.findByIdLessThanAndChannelOrderByIdDesc(fromId, channel.get(), PageRequest.of(0, 50));
     }
 }

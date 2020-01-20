@@ -51,15 +51,11 @@ public class WebController {
 
     @GetMapping("api/channels")
     @ResponseBody
-    public List<ChannelDTO> channels(Authentication authentication) {
-        //TODO list of user subscriptions
-        return channelService.findAll().stream().map(ChannelDTO::new).collect(Collectors.toList());
-    }
-
-    @PostMapping("addChannel")
-    @Secured(Privilege.Constants.ROLE_USER)//TODO
-    public void addChannel(@NotNull String name) throws Exception {
-        channelService.create(name);
+    public List<ChannelDTO> channels(Authentication authentication) throws Exception {
+        var user = userService.findByName(authentication.getName());
+        if (user.isPresent())
+            return user.get().getSubscriptions().stream().map(ChannelDTO::new).collect(Collectors.toList());
+        throw new Exception("Bad user credentials");
     }
 
     @GetMapping("api/last/{channelId}")

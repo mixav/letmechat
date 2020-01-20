@@ -6,7 +6,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Collection;
-import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -37,8 +36,13 @@ public class User {
     private UserData userData;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "creator")
-    private List<Channel> createdChannels;
+    private Collection<Channel> createdChannels;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner")
-    private List<Channel> ownedChannels;
+    private Collection<Channel> ownedChannels;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "subscribers")
+    private Collection<Channel> subscriptions;
+
+    private boolean online = false;
 }

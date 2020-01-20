@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collections;
 
 @Component
@@ -65,6 +66,14 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
             channel.setName("Sub");
             channelRepository.save(channel);
         }
+        channelRepository.findAll().forEach(channel -> {
+            if (channel.getSubscribers() == null) {
+                var subscribers = new ArrayList<User>();
+                subscribers.add(user);
+                channel.setSubscribers(subscribers);
+            }
+//            channelRepository.save(channel);
+        });
     }
 
     private void createUserDataIfNotExists(User user) {

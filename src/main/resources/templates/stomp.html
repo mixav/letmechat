@@ -3,6 +3,7 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <div th:replace="fragments/header :: header"></div>
+    <link th:href="@{/static/custom.css}" rel="stylesheet"/>
     <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js" crossorigin="anonymous"></script>
     <script src="/stomp/stomp.min.js"></script>
     <script src="/stomp/app.js"></script>

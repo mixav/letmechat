@@ -95,12 +95,15 @@ function getMessageElement(content){
 
 function getTimeElement(time){
     var date = new Date(time);
-    return '<sup class="mt-auto ml-auto text-secondary" data-toggle="tooltip" data-placement="top" title="' + date.toLocaleDateString() + '">' +
-           clearTime(date) + '</sup>';
+    return '<div class="message-time text-secondary" data-toggle="tooltip" data-placement="top" title="' + date.toLocaleDateString() + '">' +
+           clearTime(date) + '</div>';
 }
 
 function getUserElement(username){
-    return '<a href="/user/' + username + '" class="col-sm-1 p-0 text-decoration-none text-warning font-weight-bold text-truncate">' + username + '</a>';
+    return '<a href="/user/' + username +
+            '" class="col-sm-1 p-0 text-decoration-none text-warning font-weight-bold message-user">' +
+             username +
+              '</a>';
 }
 
 function clearTime(date) {
