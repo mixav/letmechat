@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,21 +29,25 @@ public class ChannelService extends GenericService<Channel> {
         var channel = new Channel();
         var user = userService.findByName(SecurityContextHolder.getContext().getAuthentication().getName());
         if (user.isPresent()) {
+            channel.setName(name);
             channel.setCreator(user.get());
             channel.setOwner(user.get());
-            return save(channel);
+            channel.setSubscribers(new ArrayList<>());
+            return subscribe(user.get(), channel);
         } else throw new Exception("Wrong user credentials."); //TODO
     }
 
-    public void subscribe(User user, Channel channel) {
+    public Channel subscribe(User user, Channel channel) {
         var users = channel.getSubscribers();
         users.add(user);
         channel.setSubscribers(users);
+        return save(channel);
     }
 
-    public void unsubscribe(User user, Channel channel) {
+    public Channel unsubscribe(User user, Channel channel) {
         var users = channel.getSubscribers();
         users.remove(user);
         channel.setSubscribers(users);
+        return save(channel);
     }
 }

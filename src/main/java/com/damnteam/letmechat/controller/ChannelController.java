@@ -10,7 +10,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,19 +24,24 @@ public class ChannelController {
     private UserService userService;
 
     @PostMapping("subscribe/{channelId}")
-    public void subscribe(@PathVariable(name = "channelId") Long channelId, Authentication authentication) {
+    @ResponseBody
+    public ChannelDTO subscribe(@PathVariable(name = "channelId") Long channelId, Authentication authentication) throws Exception {
         var channel = channelService.findById(channelId);
         var user = userService.findByName(authentication.getName());
-        if (channel.isPresent() && user.isPresent())
-            channelService.subscribe(user.get(), channel.get());
+        if (channel.isPresent() && user.isPresent()){
+            return new ChannelDTO(channelService.subscribe(user.get(), channel.get()));
+        }
+        throw new Exception("Wrong credentials");
     }
 
     @PostMapping("unsubscribe/{channelId}")
-    public void unsubscribe(@PathVariable(name = "channelId") Long channelId, Authentication authentication) {
+    @ResponseBody
+    public ChannelDTO unsubscribe(@PathVariable(name = "channelId") Long channelId, Authentication authentication) throws Exception {
         var channel = channelService.findById(channelId);
         var user = userService.findByName(authentication.getName());
         if (channel.isPresent() && user.isPresent())
-            channelService.unsubscribe(user.get(), channel.get());
+            return new ChannelDTO(channelService.unsubscribe(user.get(), channel.get()));
+        throw new Exception("Wrong credentials");
     }
 
     @GetMapping("list")
@@ -46,10 +50,11 @@ public class ChannelController {
         return channelService.findAll().stream().map(ChannelDTO::new).collect(Collectors.toList());
     }
 
-    @PostMapping("addChannel")
+    @PostMapping("create")
     @Secured(Privilege.Constants.ROLE_USER)//TODO
-    public void addChannel(@NotNull String name) throws Exception {
-        channelService.create(name);
+    @ResponseBody
+    public ChannelDTO addChannel(@RequestParam String name) throws Exception {
+        return new ChannelDTO(channelService.create(name));
     }
 
 }

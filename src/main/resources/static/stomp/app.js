@@ -21,18 +21,27 @@ function connect() {
     stompClient.connect({}, function (frame) {
         setConnected(true);
         console.log('Connected: ' + frame);
-        channels.forEach( function(channel){
-            stompClient.subscribe('/chat/' + channel.id, function (response) {
-                if(parseInt(response.headers.subscription) === activeChannel.id)
-                    showMessage(JSON.parse(response.body));
-                    //TODO add informing about messages in nonactive channels
-            }, { id: channel.id });
-            $('#channels tbody')
-                .append('<tr><td style="cursor:pointer;" id=ch' + channel.id +'>' + channel.name + '</td></tr>');
-        })
+        channels.forEach(connectChannel);
         $('#channels tbody').click(changeChannel);
         setActiveChannel(channels[0]);
     });
+}
+
+function connectChannel(channel){
+    if(channel) {
+        stompClient.subscribe(
+            '/chat/' + channel.id,
+            function (response) {
+                if(parseInt(response.headers.subscription) === activeChannel.id) {
+                    showMessage(JSON.parse(response.body));
+                } else {
+                    //TODO add informing about messages in nonactive channels
+            }},
+            { id: channel.id }
+        );
+        $('#channels tbody')
+            .append('<tr><td style="cursor:pointer;" id=ch' + channel.id +'>' + channel.name + '</td></tr>');
+    }
 }
 
 function disconnect() {
@@ -110,6 +119,43 @@ function clearTime(date) {
     var h = (date.getHours() < 10 ? '0' : '') + date.getHours();
     var m = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
     return h + ':' + m;
+}
+
+function addChannel() {
+    $.get('channel/list',function(data){
+        $('#chlist tbody').html('');
+        data.forEach(function(channel) {
+            $('#chlist tbody')
+                .append('<tr><td id=chan' + channel.id +' class="d-flex justify-content-between p-2">' +
+                    '<div class="my-auto">' + channel.name + '</div>' +
+                    '<button onclick="joinChannel(event)" id=join'+ channel.id +
+                    '  class="btn btn-sm btn-outline-light">Join</button>' +
+                    '</td></tr>');
+        })
+        $('#channelList').modal();
+    })
+}
+
+function createChannel() {
+    var channelName = $('#newName').val();
+    if(channelName.length > 0){
+        $.post('channel/create',{'name':$('#newName').val()},function(response){
+            $('#newName').val('');
+            connectChannel(response);
+            setActiveChannel(response);
+            $('#channelList').modal('hide');
+        })
+    }
+
+}
+
+function joinChannel(e) {
+    var clickedId = parseInt(e.target.id.match(/\d+/), 10);
+    $.post('channel/subscribe/'+clickedId,function(response){
+        connectChannel(response);
+        setActiveChannel(response);
+        $('#channelList').modal('hide');
+    })
 }
 
 $(function () {

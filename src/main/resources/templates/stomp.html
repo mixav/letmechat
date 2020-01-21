@@ -8,6 +8,7 @@
     <script src="/stomp/stomp.min.js"></script>
     <script src="/stomp/app.js"></script>
     <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/82f5219798.js" crossorigin="anonymous"></script>
 </head>
 <body class="bg-dark text-white">
 <div id="main-content" class="container-fluid d-flex">
@@ -15,7 +16,16 @@
         <table id="channels" class="table table-dark">
             <thead class="table-borderless">
             <tr>
-                <th class="sticky-top bg-dark">Channels</th>
+                <th class="sticky-top bg-dark">
+                    <div class="row m-0">
+                        <div>Channels</div>
+                        <div class="flex-grow-1"></div>
+                        <button id="#addChannel" th:onclick="addChannel()"
+                                class="btn btn-outline-secondary btn-circle-sm">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </th>
             </tr>
             </thead>
             <tbody>
@@ -58,6 +68,62 @@
             <tbody>
             </tbody>
         </table>
+    </div>
+    <div id="channelList" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridModalLabel"
+         style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-medium" role="document">
+            <div class="modal-content bg-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title">Subscribe to channel</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body p-2">
+                    <div class="container-fluid p-0 row m-0">
+                        <div style="height:500px;" class="overflow-auto col-6 border-right">
+                            <table id="chlist" class="table table-dark ">
+                                <thead class="table-borderless">
+                                <tr>
+                                    <th class="sticky-top bg-dark p-0 border-0">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text bg-transparent">
+                                                    <i class="text-white fas fa-search"></i>
+                                                </div>
+                                            </div>
+                                            <input type="text"
+                                                   id="chSearch"
+                                                   class="form-control bg-transparent text-white"
+                                                   autocomplete="chSearch"
+                                                   placeholder="You can try to search"
+                                            >
+                                        </div>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-6">
+                            <div class="input-group">
+                                <input type="text"
+                                       id="newName"
+                                       class="form-control bg-transparent text-white"
+                                       autocomplete="newChannelName"
+                                       placeholder="or create a new one..."
+                                >
+                                <div class="input-group-append">
+                                    <button id="create" th:onclick="createChannel()" class="btn btn-outline-light">Create
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 </body>
