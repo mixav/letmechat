@@ -128,12 +128,21 @@ function addChannel() {
             $('#chlist tbody')
                 .append('<tr><td id=chan' + channel.id +' class="d-flex justify-content-between p-2">' +
                     '<div class="my-auto">' + channel.name + '</div>' +
-                    '<button onclick="joinChannel(event)" id=join'+ channel.id +
-                    '  class="btn btn-sm btn-outline-light">Join</button>' +
+                    checkChannel(channel) +
                     '</td></tr>');
         })
         $('#channelList').modal();
     })
+}
+
+function checkChannel(channel){
+    if(channels.some(ch => ch.id === channel.id)) {
+        return '<button onclick="leaveChannel(event)" id=list'+ channel.id +
+                                   '  class="btn btn-sm btn-outline-light">Leave</button>'
+    } else {
+        return '<button onclick="joinChannel(event)" id=list'+ channel.id +
+                                   '  class="btn btn-sm btn-outline-light">Join</button>'
+    }
 }
 
 function createChannel() {
@@ -152,10 +161,29 @@ function createChannel() {
 function joinChannel(e) {
     var clickedId = parseInt(e.target.id.match(/\d+/), 10);
     $.post('channel/subscribe/'+clickedId,function(response){
+        channels.push(response);
         connectChannel(response);
         setActiveChannel(response);
         $('#channelList').modal('hide');
     })
+}
+
+function leaveChannel(e) {
+    var clickedId = parseInt(e.target.id.match(/\d+/), 10);
+    $.post('channel/unsubscribe/'+clickedId,function(response){
+        disconnectChannel(response);
+        var index = channels.findIndex(ch => response.id === ch.id);
+        channels.splice(index, 1);
+        if(activeChannel.id === response.id) {
+            setActiveChannel(channels[0]);
+        }
+        $('#ch' + clickedId).parent().remove();
+        $('#channelList').modal('hide');
+    })
+}
+
+function disconnectChannel(channel) {
+    stompClient.unsubscribe('/chat/' + channel.id);
 }
 
 $(function () {
