@@ -28,8 +28,8 @@ public class ChannelController {
     public ChannelDTO subscribe(@PathVariable(name = "channelId") Long channelId, Authentication authentication) throws Exception {
         var channel = channelService.findById(channelId);
         var user = userService.findByName(authentication.getName());
-        if (channel.isPresent() && user.isPresent()){
-            return new ChannelDTO(channelService.subscribe(user.get(), channel.get()));
+        if (channel.isPresent() && user.isPresent()) {
+            return ChannelDTO.getForUser(channelService.subscribe(user.get(), channel.get()), user.get());
         }
         throw new Exception("Wrong credentials");
     }
@@ -40,20 +40,25 @@ public class ChannelController {
         var channel = channelService.findById(channelId);
         var user = userService.findByName(authentication.getName());
         if (channel.isPresent() && user.isPresent())
-            return new ChannelDTO(channelService.unsubscribe(user.get(), channel.get()));
-        throw new Exception("Wrong credentials");
+            return ChannelDTO.getForUser(channelService.unsubscribe(user.get(), channel.get()), user.get());
+        throw new Exception("Wrong credentials"); //TODO
     }
 
     @GetMapping("list")
     @ResponseBody
-    public List<ChannelDTO> getChannelList() {
-        return channelService.findAll().stream().map(ChannelDTO::new).collect(Collectors.toList());
+    public List<ChannelDTO> getChannelList(Authentication authentication) throws Exception {
+        var user = userService.findByName(authentication.getName());
+        if (user.isPresent())
+            return channelService.findAll().stream().map(channel -> ChannelDTO.getForUser(channel, user.get())).collect(Collectors.toList());
+        else throw new Exception("Wrong credentials"); //TODO
+
     }
 
     @PostMapping("create")
     @Secured(Privilege.Constants.ROLE_USER)//TODO
     @ResponseBody
     public ChannelDTO addChannel(@RequestParam String name) throws Exception {
+        if (name.isEmpty()) throw new Exception("Empty channel name");
         return new ChannelDTO(channelService.create(name));
     }
 

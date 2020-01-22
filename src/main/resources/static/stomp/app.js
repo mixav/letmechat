@@ -67,7 +67,7 @@ function showMessage(content) {
 }
 
 function setActiveChannel(channel) {
-    $.get('api/last/' + channel.id, function(data){
+    $.get('message/last/' + channel.id, function(data){
         if(activeChannel != null)
             $('#ch' + activeChannel.id).removeClass('font-weight-bold');
         activeChannel = channel;
@@ -190,7 +190,7 @@ $(function () {
     $('#main-content form').on('submit', function (e) { e.preventDefault(); });
     $('header form').on('submit', disconnect());
     $('#send').click(sendMessage);
-    $.get('api/channels', function(data){
+    $.get('user/subscriptions', function(data){
         channels = data;
         connect();
     })
@@ -198,7 +198,7 @@ $(function () {
         if ($('div.overflow-auto').scrollTop() == 0) {
             var messageId = $('#pool td').first().prop('id');
             if(!messageId) return;
-            $.get('api/prev/' + activeChannel.id, { 'id': messageId }, function(data){
+            $.get('message/prev/' + activeChannel.id, { 'id': messageId }, function(data){
                 data.forEach(function(message){ //TODO consider usage of for loop for break availability
                     if(message.id < messageId)
                         $('#pool').prepend(getMessageElement(message));

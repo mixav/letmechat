@@ -1,6 +1,7 @@
 package com.damnteam.letmechat.error;
 
 import com.damnteam.letmechat.util.GenericResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,11 +13,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class AppExceptionHandler extends ResponseEntityExceptionHandler {
 
-    private final MessageSource messageSource;
-
-    public AppExceptionHandler(MessageSource messageSource) {
-        this.messageSource = messageSource;
-    }
+    @Autowired
+    private MessageSource messageSource;
 
     @ExceptionHandler({LoginAlreadyTakenException.class})
     public ResponseEntity<Object> handleLoginAlreadyTakenException(final Exception ex) {
@@ -26,12 +24,7 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({Exception.class})
     public ResponseEntity<Object> handleCommonException(final Exception ex, final WebRequest request) {
-        String message;
-        if (ex.getMessage() != null) {
-            message = ex.getMessage();
-        } else {
-            message = messageSource.getMessage("error.message", null, request.getLocale());
-        }
+        String message = ex.getMessage() != null ? ex.getMessage() : messageSource.getMessage("error.message", null, request.getLocale());
         final GenericResponse genericResponse = new GenericResponse(message, "Internal Error");
         return new ResponseEntity<>(genericResponse, HttpStatus.I_AM_A_TEAPOT);
     }
