@@ -29,10 +29,11 @@ public class ChannelDTO {
         dto.setId(channel.getId())
                 .setName(channel.getName())
                 .setSubscribersCount(channel.getSubscribers().size());
-        if (user.getId().equals(channel.getOwner().getId()) ||
-                user.getId().equals(channel.getCreator().getId())) {
-            dto.setCreator(channel.getCreator().getName())
-                    .setOwner(channel.getOwner().getName());
+        if (user.getId().equals(channel.getOwner().getId())) {
+            dto.setOwner(channel.getOwner().getName());
+        }
+        if (user.getId().equals(channel.getCreator().getId())) {
+            dto.setCreator(channel.getCreator().getName());
         }
         return dto;
     }

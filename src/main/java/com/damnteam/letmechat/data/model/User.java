@@ -41,7 +41,7 @@ public class User {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner")
     private Collection<Channel> ownedChannels;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "subscribers")
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST, mappedBy = "subscribers")
     private Collection<Channel> subscriptions;
 
     private boolean online = false;

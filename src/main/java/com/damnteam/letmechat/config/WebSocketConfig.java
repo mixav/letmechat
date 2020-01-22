@@ -1,7 +1,5 @@
 package com.damnteam.letmechat.config;
 
-//import com.damnteam.letmechat.service.CustomMessageHandler;
-
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
@@ -11,12 +9,6 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
-
-//    @Bean
-//    public WebSocketHandler customMessageHandler() {
-//        return new CustomMessageHandler();
-//    }
-
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {

@@ -8,6 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -49,5 +50,12 @@ public class ChannelService extends GenericService<Channel> {
         users.remove(user);
         channel.setSubscribers(users);
         return save(channel);
+    }
+
+    public Collection<User> getSubscribers(Long channelId) throws Exception {
+        if(channelRepository.findById(channelId).isPresent()){
+            return channelRepository.findById(channelId).get().getSubscribers();
+        }
+        throw new Exception("Channel not found");
     }
 }

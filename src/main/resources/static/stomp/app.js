@@ -33,7 +33,11 @@ function connectChannel(channel){
             '/chat/' + channel.id,
             function (response) {
                 if(parseInt(response.headers.subscription) === activeChannel.id) {
-                    showMessage(JSON.parse(response.body));
+                    if(response.headers['message-type'] === 'notification') {
+                        proceedNotification(JSON.parse(response.body));
+                    } else {
+                        showMessage(JSON.parse(response.body));
+                    }
                 } else {
                     //TODO add informing about messages in nonactive channels
             }},
@@ -50,6 +54,11 @@ function disconnect() {
     }
     setConnected(false);
     console.log('Disconnected');
+}
+
+function proceedNotification(content) {
+    console.log(content);
+    $('#users tbody [user="'+content.name+'"]').children('[online]').html(''+content.online);
 }
 
 function sendMessage() {
@@ -77,7 +86,15 @@ function setActiveChannel(channel) {
         data.forEach(function(content){
             $('#pool').prepend(getMessageElement(content))}
         )
-        $('div.overflow-auto').scrollTop($('div.overflow-auto').prop('scrollHeight'));//TODO use id
+        $('#conversation').parent().scrollTop($('#conversation').parent().prop('scrollHeight'));//TODO use id
+        $.get('channel/subscribers/' + activeChannel.id,function(response){
+        $('#users tbody').html('');
+            response.forEach(user =>{
+                $('#users tbody').append(
+                '<tr><td user='+user.name +'><div>firstName=' + user.firstName + '</div>'+ '<div>login=' + user.name + '</div>'+ '<div online>online?' + user.online + '</div></tr></td>'
+                )
+            })
+        })
     })
 }
 
@@ -104,7 +121,7 @@ function getMessageElement(content){
 
 function getTimeElement(time){
     var date = new Date(time);
-    return '<div class="message-time text-secondary" data-toggle="tooltip" data-placement="top" title="' + date.toLocaleDateString() + '">' +
+    return '<div class="message-time text-secondary" data-toggle="tooltip" data-placement="top" title=' + date.toLocaleDateString() + '>' +
            clearTime(date) + '</div>';
 }
 
@@ -124,25 +141,38 @@ function clearTime(date) {
 function addChannel() {
     $.get('channel/list',function(data){
         $('#chlist tbody').html('');
+        $('#userchlist tbody').html('');
         data.forEach(function(channel) {
-            $('#chlist tbody')
-                .append('<tr><td id=chan' + channel.id +' class="d-flex justify-content-between p-2">' +
-                    '<div class="my-auto">' + channel.name + '</div>' +
+            var table;
+            var removable = false;
+            if(channel.owner || channel.creator) {
+                table = '#userchlist tbody';
+                if(channel.creator) {
+                    removable = true;
+                }
+            } else {
+                table = '#chlist tbody';
+            }
+            $(table)
+                .append('<tr><td id=chan' + channel.id +' class="p-2 d-flex">' +
+                    '<div class="my-auto" data-toggle="tooltip" data-placement="top" title="total subs: ' + channel.subscribersCount + '">' + channel.name + '</div>' +
+                    '<div class="flex-grow-1"></div>' +
                     checkChannel(channel) +
+//                    (removable ? '<button onclick=deleteChannel() id=rem' + channel.id + ' class="btn btn-sm btn-fixed-width btn-outline-light">Delete</button>':'') +
                     '</td></tr>');
-        })
+            })
         $('#channelList').modal();
     })
 }
 
 function checkChannel(channel){
-    if(channels.some(ch => ch.id === channel.id)) {
-        return '<button onclick="leaveChannel(event)" id=list'+ channel.id +
-                                   '  class="btn btn-sm btn-outline-light">Leave</button>'
-    } else {
-        return '<button onclick="joinChannel(event)" id=list'+ channel.id +
-                                   '  class="btn btn-sm btn-outline-light">Join</button>'
-    }
+    var joined = channels.some(ch => ch.id === channel.id);
+    return '<button onclick=' +
+            (joined ? 'leaveChannel(event)' : 'joinChannel(event)') +
+            ' id=list'+ channel.id +
+            ' class="btn btn-sm btn-fixed-width btn-outline-light">' +
+            (joined ? 'Leave' : 'Join') +
+            '</button>';
 }
 
 function createChannel() {
@@ -194,8 +224,8 @@ $(function () {
         channels = data;
         connect();
     })
-    $('div.overflow-auto').scroll(function() {
-        if ($('div.overflow-auto').scrollTop() == 0) {
+    $('#conversation').parent().scroll(function() {
+        if ($('#conversation').parent().scrollTop() == 0) {
             var messageId = $('#pool td').first().prop('id');
             if(!messageId) return;
             $.get('message/prev/' + activeChannel.id, { 'id': messageId }, function(data){

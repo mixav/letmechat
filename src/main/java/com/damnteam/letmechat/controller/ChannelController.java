@@ -2,6 +2,7 @@ package com.damnteam.letmechat.controller;
 
 import com.damnteam.letmechat.data.constants.Privilege;
 import com.damnteam.letmechat.data.dto.ChannelDTO;
+import com.damnteam.letmechat.data.dto.UserDTO;
 import com.damnteam.letmechat.service.ChannelService;
 import com.damnteam.letmechat.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,4 +63,15 @@ public class ChannelController {
         return new ChannelDTO(channelService.create(name));
     }
 
+    @GetMapping("subscribers/{channelId}")
+    @ResponseBody
+    public List<UserDTO> subscribers(@PathVariable(name = "channelId") Long channelId) throws Exception {
+
+        return channelService.getSubscribers(channelId).stream()
+                .map(user -> {
+                    var dto = new UserDTO(user);
+                    dto.setOnline(userService.checkOnline(user));
+                    return dto;
+                }).collect(Collectors.toList());
+    }
 }

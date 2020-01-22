@@ -29,3 +29,7 @@
     position: relative;
     top: -1.5px;
 }
+
+.btn-fixed-width{
+    width: 55px;
+}

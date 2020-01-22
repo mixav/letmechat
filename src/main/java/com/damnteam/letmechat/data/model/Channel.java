@@ -26,7 +26,7 @@ public class Channel {
     @JoinColumn(referencedColumnName = "id", nullable = false)
     private User owner;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "subscriptions",
             inverseJoinColumns = @JoinColumn(

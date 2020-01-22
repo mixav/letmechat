@@ -81,7 +81,7 @@
                 </div>
                 <div class="modal-body p-2">
                     <div class="container-fluid p-0 row m-0">
-                        <div style="height:500px;" class="overflow-auto col-6 border-right">
+                        <div style="max-height:500px;" class="overflow-auto col-6 border-right">
                             <table id="chlist" class="table table-dark ">
                                 <thead class="table-borderless">
                                 <tr>
@@ -99,6 +99,7 @@
                                                    placeholder="You can try to search"
                                             >
                                         </div>
+                                        <span>Created by others:</span>
                                     </th>
                                 </tr>
                                 </thead>
@@ -106,19 +107,32 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="col-6">
-                            <div class="input-group">
-                                <input type="text"
-                                       id="newName"
-                                       class="form-control bg-transparent text-white"
-                                       autocomplete="newChannelName"
-                                       placeholder="or create a new one..."
-                                >
-                                <div class="input-group-append">
-                                    <button id="create" th:onclick="createChannel()" class="btn btn-outline-light">Create
-                                    </button>
-                                </div>
-                            </div>
+                        <div style="max-height:500px;" class="overflow-auto col-6">
+                            <table id="userchlist" class="table table-dark ">
+                                <thead class="table-borderless">
+                                <tr>
+                                    <th class="sticky-top bg-dark p-0 border-0">
+                                        <div class="input-group">
+                                            <input type="text"
+                                                   id="newName"
+                                                   class="form-control bg-transparent text-white"
+                                                   autocomplete="newChannelName"
+                                                   placeholder="or create a new one..."
+                                            >
+                                            <div class="input-group-append">
+                                                <button id="create" th:onclick="createChannel()"
+                                                        class="btn btn-outline-light">Create
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <span>Owned or created by you:</span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+
                         </div>
                     </div>
                 </div>

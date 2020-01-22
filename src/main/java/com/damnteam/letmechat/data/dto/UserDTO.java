@@ -19,9 +19,12 @@ public class UserDTO {
 
     private String lastName;
 
+    private boolean online;
+
     public UserDTO(User user) {
         this.name = user.getName();
         this.firstName = user.getUserData().getFirstName();
         this.lastName = user.getUserData().getLastName();
+        this.online = user.isOnline();
     }
 }
