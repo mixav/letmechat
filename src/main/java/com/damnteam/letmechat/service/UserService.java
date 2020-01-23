@@ -14,8 +14,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
+import org.springframework.web.socket.messaging.SessionSubscribeEvent;
+import org.springframework.web.socket.messaging.SessionUnsubscribeEvent;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Optional;
 
 @Service
 public class UserService extends GenericService<User> {
@@ -65,6 +70,7 @@ public class UserService extends GenericService<User> {
     }
 
     @EventListener
+    @Transactional
     public void onSocketDisconnected(SessionDisconnectEvent event) {
         var discUser = event.getUser();
         if (discUser != null) {
@@ -73,9 +79,43 @@ public class UserService extends GenericService<User> {
                 var user = res.get();
                 var head = new HashMap<String, Object>();
                 head.put("message-type", "notification");
-                user.getSubscriptions().stream()
-                        .filter(channel -> simpUserRegistry.findSubscriptions(subscription -> subscription.getId().equals(channel.getId().toString())).size() > 0)
-                        .forEach(channel -> webSocket.convertAndSend("/chat/" + channel.getId(), new UserDTO(user).setOnline(false), head));
+                head.put("notification-type", "user-offline");
+                simpUserRegistry.findSubscriptions(subscription -> subscription.getSession().getId().equals(event.getSessionId()))
+                        .forEach(subscription -> webSocket.convertAndSend(subscription.getDestination(), new UserDTO(user).setOnline(false), head));
+            }
+        }
+    }
+
+    @EventListener
+    @Transactional
+    public void onSessionSubscribed(SessionSubscribeEvent event) {
+        var subUser = event.getUser();
+        var destination = (String) event.getMessage().getHeaders().get("simpDestination");
+        if (subUser != null && destination != null) {
+            var res = userRepository.findByName(subUser.getName());
+            if (res.isPresent()) {
+                var user = res.get();
+                var head = new HashMap<String, Object>();
+                head.put("message-type", "notification");
+                head.put("notification-type", "update-user");
+                webSocket.convertAndSend(destination, new UserDTO(user).setOnline(true), head);
+            }
+        }
+    }
+
+    @EventListener
+    @Transactional
+    public void onSessionUnsubscribed(SessionUnsubscribeEvent event) {
+        var subUser = event.getUser();
+        var id = (String) event.getMessage().getHeaders().get("simpSubscriptionId");
+        if (subUser != null && id != null) {
+            var res = userRepository.findByName(subUser.getName());
+            if (res.isPresent()) {
+                var user = res.get();
+                var head = new HashMap<String, Object>();
+                head.put("message-type", "notification");
+                head.put("notification-type", "remove-user");
+                webSocket.convertAndSend(id, new UserDTO(user).setOnline(false), head);
             }
         }
     }

@@ -32,9 +32,9 @@ function connectChannel(channel){
         stompClient.subscribe(
             '/chat/' + channel.id,
             function (response) {
-                if(parseInt(response.headers.subscription) === activeChannel.id) {
+                if(activeChannel && parseInt(response.headers.subscription) === activeChannel.id) {
                     if(response.headers['message-type'] === 'notification') {
-                        proceedNotification(JSON.parse(response.body));
+                        proceedNotification(response);
                     } else {
                         showMessage(JSON.parse(response.body));
                     }
@@ -57,8 +57,17 @@ function disconnect() {
 }
 
 function proceedNotification(content) {
-    console.log(content);
-    $('#users tbody [user="'+content.name+'"]').children('[online]').html(''+content.online);
+    var body = JSON.parse(content.body)
+    if(content.headers['notification-type'] === 'remove-user')
+    {
+        $('#users tbody [user="'+ body.name +'"]').parent().remove();
+    } else {
+        if($('#users tbody [user="'+body.name+'"]').length === 0) {
+            printUser(body);
+        } else {
+            $('#users tbody [user="'+body.name+'"]').children('[online]').html(''+body.online);
+        }
+    }
 }
 
 function sendMessage() {
@@ -72,7 +81,7 @@ function sendMessage() {
 
 function showMessage(content) {
     $('#pool').append(getMessageElement(content));
-    $('div.overflow-auto').scrollTop($('div.overflow-auto').prop('scrollHeight'));//TODO use id
+    $('#conversation').parent().scrollTop($('#conversation').parent().prop('scrollHeight'));//TODO use id
 }
 
 function setActiveChannel(channel) {
@@ -86,16 +95,21 @@ function setActiveChannel(channel) {
         data.forEach(function(content){
             $('#pool').prepend(getMessageElement(content))}
         )
-        $('#conversation').parent().scrollTop($('#conversation').parent().prop('scrollHeight'));//TODO use id
+        $('#conversation').parent().scrollTop($('#conversation').parent().prop('scrollHeight'));
         $.get('channel/subscribers/' + activeChannel.id,function(response){
         $('#users tbody').html('');
-            response.forEach(user =>{
-                $('#users tbody').append(
-                '<tr><td user='+user.name +'><div>firstName=' + user.firstName + '</div>'+ '<div>login=' + user.name + '</div>'+ '<div online>online?' + user.online + '</div></tr></td>'
-                )
-            })
+            response.forEach(printUser)
         })
     })
+}
+
+function printUser(user){
+    $('#users tbody').append(
+        '<tr><td class="d-flex" user='+user.name +'>' +
+        (user.online ? '<i online class="p-1 text-success fas fa-circle"></i>' : '<i class="p-1 text-danger far fa-circle"></i>' ) +
+        '<div>' + user.name + '</div>' +
+        '</tr></td>'
+    )
 }
 
 function changeChannel(e){
