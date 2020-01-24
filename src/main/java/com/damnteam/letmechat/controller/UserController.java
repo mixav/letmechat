@@ -24,19 +24,15 @@ public class UserController {
     @GetMapping("{username}")
     @ResponseBody
     public UserDTO userInfo(@PathVariable(name = "username") String username) throws Exception {
-        if (userService.findByName(username).isPresent())
-            return new UserDTO(userService.findByName(username).get());
-        throw new Exception("No user found");
+        return new UserDTO(userService.findByName(username));
     }
 
     @GetMapping("subscriptions")
     @ResponseBody
     public List<ChannelDTO> userSubscriptions(Authentication authentication) throws Exception {
         var user = userService.findByName(authentication.getName());
-        if (user.isPresent())
-            return user.get().getSubscriptions().stream()
-                    .map(channel -> ChannelDTO.getForUser(channel, user.get()))
-                    .collect(Collectors.toList());
-        throw new Exception("Bad user credentials");
+        return user.getSubscriptions().stream()
+                .map(channel -> ChannelDTO.getForUser(channel, user))
+                .collect(Collectors.toList());
     }
 }

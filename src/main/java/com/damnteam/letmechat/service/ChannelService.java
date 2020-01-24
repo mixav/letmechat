@@ -29,13 +29,11 @@ public class ChannelService extends GenericService<Channel> {
             throw new Exception("Channel with that name already exists"); //TODO
         var channel = new Channel();
         var user = userService.findByName(SecurityContextHolder.getContext().getAuthentication().getName());
-        if (user.isPresent()) {
-            channel.setName(name);
-            channel.setCreator(user.get());
-            channel.setOwner(user.get());
-            channel.setSubscribers(new ArrayList<>());
-            return subscribe(user.get(), channel);
-        } else throw new Exception("Wrong user credentials."); //TODO
+        channel.setName(name);
+        channel.setCreator(user);
+        channel.setOwner(user);
+        channel.setSubscribers(new ArrayList<>());
+        return subscribe(user, channel);
     }
 
     public Channel subscribe(User user, Channel channel) {
@@ -53,7 +51,7 @@ public class ChannelService extends GenericService<Channel> {
     }
 
     public Collection<User> getSubscribers(Long channelId) throws Exception {
-        if(channelRepository.findById(channelId).isPresent()){
+        if (channelRepository.findById(channelId).isPresent()) {
             return channelRepository.findById(channelId).get().getSubscribers();
         }
         throw new Exception("Channel not found");

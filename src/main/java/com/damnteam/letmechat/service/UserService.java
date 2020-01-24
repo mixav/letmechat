@@ -20,7 +20,6 @@ import org.springframework.web.socket.messaging.SessionUnsubscribeEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Optional;
 
 @Service
 public class UserService extends GenericService<User> {
@@ -60,8 +59,11 @@ public class UserService extends GenericService<User> {
         return userRepository.save(user);
     }
 
-    public Optional<User> findByName(String name) {
-        return userRepository.findByName(name);
+    public User findByName(String name) throws Exception {
+        var user = userRepository.findByName(name);
+        if (user.isPresent())
+            return user.get();
+        throw new Exception("User not found.");
     }
 
     public boolean checkOnline(User user) {

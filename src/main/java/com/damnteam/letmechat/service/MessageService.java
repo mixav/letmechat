@@ -26,9 +26,9 @@ public class MessageService extends GenericService<Message> {
     public Message persistMessageOutDTO(String content, String username, Long channelId) throws Exception {
         var channel = channelService.findById(channelId);
         var user = userService.findByName(username);
-        if (channel.isPresent() && user.isPresent()) {
+        if (channel.isPresent()) {
             var message = new Message();
-            message.setUser(user.get());
+            message.setUser(user);
             message.setChannel(channel.get());
             message.setMessage(content);
             message.setTime(LocalDateTime.now());

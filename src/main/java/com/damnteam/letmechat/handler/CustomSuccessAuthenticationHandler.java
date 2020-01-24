@@ -1,6 +1,7 @@
 package com.damnteam.letmechat.handler;
 
 import com.damnteam.letmechat.service.UserService;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -16,23 +17,21 @@ public class CustomSuccessAuthenticationHandler implements AuthenticationSuccess
     @Autowired
     UserService userService;
 
+    @SneakyThrows
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
-        var temp = userService.findByName(authentication.getName());
-        temp.ifPresent(user -> {
-            user.setOnline(true);
-            userService.save(user);
-        });
+        var user = userService.findByName(authentication.getName());
+        user.setOnline(true);
+        userService.save(user);
         response.sendRedirect("/");
     }
 
+    @SneakyThrows
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        var temp = userService.findByName(authentication.getName());
-        temp.ifPresent(user -> {
-            user.setOnline(true);
-            userService.save(user);
-        });
+        var user = userService.findByName(authentication.getName());
+        user.setOnline(true);
+        userService.save(user);
         response.sendRedirect("/");
     }
 }

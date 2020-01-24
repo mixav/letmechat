@@ -11,8 +11,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
@@ -27,7 +26,7 @@ public class WebController {
     @Autowired
     private MessageService messageService;
 
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    @PostMapping(value = "/register")
     @ResponseBody
     public GenericResponse registration(@Valid RegistrationDTO registrationDTO) throws Exception {
         userService.createUserFromDTO(registrationDTO);
