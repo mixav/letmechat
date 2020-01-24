@@ -7,7 +7,7 @@
     <script src="/registration.js"></script>
 </head>
 <body>
-<form class="container" th:id="registration" action="/" method="POST" enctype="utf8">
+<form class="container" th:id="registration" th:action="@{/register}" method="POST" enctype="utf8">
     <h1 th:text="#{label.form.title}"></h1>
     <div class="form-group row">
         <label class="col-sm-2 col-form-label" th:text="#{label.user.login}">login</label>

@@ -57,15 +57,15 @@ function disconnect() {
 }
 
 function proceedNotification(content) {
-    var body = JSON.parse(content.body)
+    var body = JSON.parse(content.body);
     if(content.headers['notification-type'] === 'remove-user')
     {
         $('#users tbody [user="'+ body.name +'"]').parent().remove();
     } else {
         if($('#users tbody [user="'+body.name+'"]').length === 0) {
-            printUser(body);
+            printUserList(body);
         } else {
-            $('#users tbody [user="'+body.name+'"]').children('[online]').html(''+body.online);
+            $('#users tbody [user="'+body.name+'"]').parent().replaceWith(printUser(body));
         }
     }
 }
@@ -98,18 +98,19 @@ function setActiveChannel(channel) {
         $('#conversation').parent().scrollTop($('#conversation').parent().prop('scrollHeight'));
         $.get('channel/subscribers/' + activeChannel.id,function(response){
         $('#users tbody').html('');
-            response.forEach(printUser)
+            response.forEach(printUserList)
         })
     })
 }
 
+function printUserList(user){
+    $('#users tbody').append(printUser(user));
+}
 function printUser(user){
-    $('#users tbody').append(
-        '<tr><td class="d-flex" user='+user.name +'>' +
+   return '<tr><td class="d-flex" user='+user.name +'>' +
         (user.online ? '<i online class="p-1 text-success fas fa-circle"></i>' : '<i class="p-1 text-danger far fa-circle"></i>' ) +
         '<div>' + user.name + '</div>' +
-        '</tr></td>'
-    )
+        '</tr></td>';
 }
 
 function changeChannel(e){
@@ -192,7 +193,11 @@ function checkChannel(channel){
 function createChannel() {
     var channelName = $('#newName').val();
     if(channelName.length > 0){
-        $.post('channel/create',{'name':$('#newName').val()},function(response){
+        $.post('channel/create',{
+            'name' : $('#newName').val(),
+            '_csrf' : $('header form input[name="_csrf"]').val()
+        },
+        function(response){
             $('#newName').val('');
             connectChannel(response);
             setActiveChannel(response);
@@ -204,25 +209,33 @@ function createChannel() {
 
 function joinChannel(e) {
     var clickedId = parseInt(e.target.id.match(/\d+/), 10);
-    $.post('channel/subscribe/'+clickedId,function(response){
-        channels.push(response);
-        connectChannel(response);
-        setActiveChannel(response);
-        $('#channelList').modal('hide');
+    $.post('channel/subscribe/'+clickedId,
+        {
+            '_csrf' : $('header form input[name="_csrf"]').val()
+        },
+        function(response){
+            channels.push(response);
+            connectChannel(response);
+            setActiveChannel(response);
+            $('#channelList').modal('hide');
     })
 }
 
 function leaveChannel(e) {
     var clickedId = parseInt(e.target.id.match(/\d+/), 10);
-    $.post('channel/unsubscribe/'+clickedId,function(response){
-        disconnectChannel(response);
-        var index = channels.findIndex(ch => response.id === ch.id);
-        channels.splice(index, 1);
-        if(activeChannel.id === response.id) {
-            setActiveChannel(channels[0]);
-        }
-        $('#ch' + clickedId).parent().remove();
-        $('#channelList').modal('hide');
+    $.post('channel/unsubscribe/'+clickedId,
+        {
+            '_csrf' : $('header form input[name="_csrf"]').val()
+        },
+        function(response){
+            disconnectChannel(response);
+            var index = channels.findIndex(ch => response.id === ch.id);
+            channels.splice(index, 1);
+            if(activeChannel.id === response.id) {
+                setActiveChannel(channels[0]);
+            }
+            $('#ch' + clickedId).parent().remove();
+            $('#channelList').modal('hide');
     })
 }
 

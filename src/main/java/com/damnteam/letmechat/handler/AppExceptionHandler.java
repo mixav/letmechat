@@ -1,5 +1,6 @@
-package com.damnteam.letmechat.error;
+package com.damnteam.letmechat.handler;
 
+import com.damnteam.letmechat.error.LoginAlreadyTakenException;
 import com.damnteam.letmechat.util.GenericResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;

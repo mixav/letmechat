@@ -20,10 +20,10 @@
                 </form>
             </div>
             <div class="btn-toolbar" sec:authorize="isAuthenticated()">
-                <form action="/stomp">
+                <form th:action="@{/stomp}">
                     <input class="btn btn-dark" type="submit" value="STOMP"/>
                 </form>
-                <form action="/logout">
+                <form th:action="@{/logout}" method="POST">
                     <input class="btn btn-dark" type="submit" value="Log out"/>
                 </form>
             </div>
