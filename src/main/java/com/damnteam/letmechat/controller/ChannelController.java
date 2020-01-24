@@ -29,10 +29,7 @@ public class ChannelController {
     public ChannelDTO subscribe(@PathVariable(name = "channelId") Long channelId, Authentication authentication) throws Exception {
         var channel = channelService.findById(channelId);
         var user = userService.findByName(authentication.getName());
-        if (channel.isPresent()) {
-            return ChannelDTO.getForUser(channelService.subscribe(user, channel.get()), user);
-        }
-        throw new Exception("Wrong credentials");
+        return ChannelDTO.getForUser(channelService.subscribe(user, channel), user);
     }
 
     @PostMapping("unsubscribe/{channelId}")
@@ -40,9 +37,7 @@ public class ChannelController {
     public ChannelDTO unsubscribe(@PathVariable(name = "channelId") Long channelId, Authentication authentication) throws Exception {
         var channel = channelService.findById(channelId);
         var user = userService.findByName(authentication.getName());
-        if (channel.isPresent())
-            return ChannelDTO.getForUser(channelService.unsubscribe(user, channel.get()), user);
-        throw new Exception("Wrong credentials"); //TODO
+        return ChannelDTO.getForUser(channelService.unsubscribe(user, channel), user);
     }
 
     @GetMapping("list")
@@ -65,7 +60,6 @@ public class ChannelController {
     @GetMapping("subscribers/{channelId}")
     @ResponseBody
     public List<UserDTO> subscribers(@PathVariable(name = "channelId") Long channelId) throws Exception {
-
         return channelService.getSubscribers(channelId).stream()
                 .map(user -> {
                     var dto = new UserDTO(user);

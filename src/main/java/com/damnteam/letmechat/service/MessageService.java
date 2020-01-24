@@ -26,26 +26,22 @@ public class MessageService extends GenericService<Message> {
     public Message persistMessageOutDTO(String content, String username, Long channelId) throws Exception {
         var channel = channelService.findById(channelId);
         var user = userService.findByName(username);
-        if (channel.isPresent()) {
-            var message = new Message();
-            message.setUser(user);
-            message.setChannel(channel.get());
-            message.setMessage(content);
-            message.setTime(LocalDateTime.now());
-            return messageRepository.save(message);
-        } else throw new Exception("Incorrect message received"); //TODO
+        var message = new Message();
+        message.setUser(user);
+        message.setChannel(channel);
+        message.setMessage(content);
+        message.setTime(LocalDateTime.now());
+        return messageRepository.save(message);
     }
 
     public List<Message> findLastInChannel(Long channelId) throws Exception {
         var channel = channelService.findById(channelId);
-        if (channel.isEmpty()) throw new Exception("Channel not found"); //TODO
-        return messageRepository.findTop30ByChannelOrderByTimeDesc(channel.get());
+        return messageRepository.findTop30ByChannelOrderByTimeDesc(channel);
     }
 
     public List<Message> findPrevInChannel(Long channelId, Long fromId) throws Exception {
         var channel = channelService.findById(channelId);
-        if (channel.isEmpty()) throw new Exception("Channel not found"); //TODO
         //TODO page size flexibility for better api experience
-        return messageRepository.findByIdLessThanAndChannelOrderByIdDesc(fromId, channel.get(), PageRequest.of(0, 50));
+        return messageRepository.findByIdLessThanAndChannelOrderByIdDesc(fromId, channel, PageRequest.of(0, 50));
     }
 }

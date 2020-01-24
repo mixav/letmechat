@@ -51,9 +51,6 @@ public class ChannelService extends GenericService<Channel> {
     }
 
     public Collection<User> getSubscribers(Long channelId) throws Exception {
-        if (channelRepository.findById(channelId).isPresent()) {
-            return channelRepository.findById(channelId).get().getSubscribers();
-        }
-        throw new Exception("Channel not found");
+        return findById(channelId).getSubscribers();
     }
 }
