@@ -60,12 +60,12 @@ function proceedNotification(content) {
     var body = JSON.parse(content.body);
     if(content.headers['notification-type'] === 'remove-user')
     {
-        $('#users tbody [user="'+ body.name +'"]').parent().remove();
+        $('#users tbody [name="'+ body.name +'"]').parent().remove();
     } else {
-        if($('#users tbody [user="'+body.name+'"]').length === 0) {
+        if($('#users tbody [name="'+body.name+'"]').length === 0) {
             printUserList(body);
         } else {
-            $('#users tbody [user="'+body.name+'"]').parent().replaceWith(printUser(body));
+            $('#users tbody [name="'+body.name+'"]').parent().replaceWith(printUser(body));
         }
     }
 }
@@ -106,9 +106,10 @@ function setActiveChannel(channel) {
 function printUserList(user){
     $('#users tbody').append(printUser(user));
 }
+
 function printUser(user){
-   return '<tr><td class="d-flex" user='+user.name +'>' +
-        (user.online ? '<i online class="p-1 text-success fas fa-circle"></i>' : '<i class="p-1 text-danger far fa-circle"></i>' ) +
+   return '<tr><td class="d-flex" name=' + user.name +'>' +
+        (user.online ? '<i class="p-1 text-success far fa-circle"></i>' : '<i class="p-1 text-danger far fa-circle"></i>' ) +
         '<div>' + user.name + '</div>' +
         '</tr></td>';
 }
@@ -159,12 +160,8 @@ function addChannel() {
         $('#userchlist tbody').html('');
         data.forEach(function(channel) {
             var table;
-            var removable = false;
             if(channel.owner || channel.creator) {
                 table = '#userchlist tbody';
-                if(channel.creator) {
-                    removable = true;
-                }
             } else {
                 table = '#chlist tbody';
             }
@@ -173,7 +170,7 @@ function addChannel() {
                     '<div class="my-auto" data-toggle="tooltip" data-placement="top" title="total subs: ' + channel.subscribersCount + '">' + channel.name + '</div>' +
                     '<div class="flex-grow-1"></div>' +
                     checkChannel(channel) +
-//                    (removable ? '<button onclick=deleteChannel() id=rem' + channel.id + ' class="btn btn-sm btn-fixed-width btn-outline-light">Delete</button>':'') +
+//                    (channel.creator ? '<button onclick=deleteChannel() id=rem' + channel.id + ' class="btn btn-sm btn-fixed-width btn-outline-light">Delete</button>':'') +
                     '</td></tr>');
             })
         $('#channelList').modal();
