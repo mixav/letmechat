@@ -1,9 +1,11 @@
 package com.damnteam.letmechat.service;
 
 import com.damnteam.letmechat.data.dao.MessageRepository;
+import com.damnteam.letmechat.data.model.Channel;
 import com.damnteam.letmechat.data.model.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,12 +38,21 @@ public class MessageService extends GenericService<Message> {
 
     public List<Message> findLastInChannel(Long channelId) throws Exception {
         var channel = channelService.findById(channelId);
-        return messageRepository.findTop30ByChannelOrderByTimeDesc(channel);
+        if (isSubscriber(channel))
+            return messageRepository.findTop30ByChannelOrderByTimeDesc(channel);
+        throw new Exception("User is not subscriber of the channel");//TODO
     }
 
     public List<Message> findPrevInChannel(Long channelId, Long fromId) throws Exception {
-        var channel = channelService.findById(channelId);
         //TODO page size flexibility for better api experience
-        return messageRepository.findByIdLessThanAndChannelOrderByIdDesc(fromId, channel, PageRequest.of(0, 50));
+        var channel = channelService.findById(channelId);
+        if (isSubscriber(channel))
+            return messageRepository.findByIdLessThanAndChannelOrderByIdDesc(fromId, channel, PageRequest.of(0, 50));
+        throw new Exception("User is not subscriber of the channel");//TODO
+    }
+
+    public boolean isSubscriber(Channel channel) throws Exception {
+        var user = userService.findByName(SecurityContextHolder.getContext().getAuthentication().getName());
+        return channel.getSubscribers().contains(user);
     }
 }
