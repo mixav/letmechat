@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Let me Chat</title>
+</head>
+
+<body>
+<h1>Login</h1>
+
+<form method="POST" th:action="@{/login}" id="loginForm">
+
+    <label for="username">Username</label>
+    <input type="text" name="username"/>
+
+    <label for="password"> Password</label>
+    <input type="password" name="password"/>
+
+    <input type="submit" value="Login"/>
+</form>
+</body>
+</html>

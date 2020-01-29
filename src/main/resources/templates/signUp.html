@@ -1,77 +1,33 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns="http://www.w3.org/1999/xhtml"
+<html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">-->
-    <title>Registration page</title>
-    <link type="text/css" th:href="@{~/static/css/main.css}" rel="stylesheet"/>-->
-    <link th:href="@{~/static/css/bootstrap/bootstrap.min.css}" rel="stylesheet"/>
-    <script src="https://kit.fontawesome.com/3a4836f7da.js" crossorigin="anonymous"></script>
+    <title>Let Me Chat</title>
 </head>
+
 <body>
-<div class="page-container">
-    <div class="form-container">
-        <form class="signUp" th:action="@{/}" method="post">
-            <!--            Form title-->
-            <span class="form-title text-uppercase">Sign Up</span>
-            <!--            Input-->
-            <div class="form-input-container">
-                <input class="form-input" name="username" value="" placeholder="Username" required/>
-                <span class="form-input-icon">
-                            <i class="fas fa-user"></i>
-                        </span>
-            </div>
+<h1>Register</h1>
 
-            <!--            Input-->
-            <div class="form-input-container">
-                <input class="form-input" name="lastName"  value="" placeholder="Last Name" required/>
-            </div>
+<form method="POST" th:action="@{/registration}" id="registrationForm">
 
-            <!--            Input-->
-            <div class="form-input-container">
-                <input class="form-input" name="firstName"  value="" placeholder="First Name" required/>
-            </div>
+    <label for="username"> Username: </label>
+    <input type="text" name="username"/>
 
-            <div class="form-input-container">
-                <input class="form-input" name="email"  value="" placeholder="Email" required/>
-                <span class="form-input-icon">
-                     <i class="fas fa-at"></i>
-                </span>
-            </div>
+    <label for="password"> Password: </label>
+    <input type="password" name="password"/>
 
-            <!--            Input-->
-            <div class="form-input-container">
-                <input class="form-input" name="password" type="password" value="" placeholder="Password" required/>
-                <span class="form-input-icon">
-                            <i class="fas fa-lock"></i>
-                        </span>
-            </div>
+    <label for="confirm"> Confirm password: </label>
+    <input type="password" name="confirm"/>
 
-            <!--            Input-->
-            <div class="form-input-container">
-                <input class="form-input" name="passwordConfirmation" type="password" value="" placeholder="Confirm Password" required/>
-                <span class="form-input-icon">
-                            <i class="fas fa-lock"></i>
-                        </span>
-            </div>
+    <label for="firstName"> First name: </label>
+    <input type="text" name="firstName"/>
 
-            <div class="form-footer-container">
-                <!--            Button-->
-                <span class="form-button-container">
-                    <button class="btn submit-btn">Register</button>
-                </span>
-                <!--            Create an account-->
-                <span class="form-text create-an-account-text">
-                    <a class="link-to-text" href="@{/}">Already have an account? Sign in...</a>
-                </span>
-            </div>
-        </form>
-    </div>
-</div>
+    <label for="lastName"> Last name: </label>
+    <input type="text" name="lastName"/>
 
-<!--javascript scripts-->
-<script src="@{~/static/js/jquery/jquery-3.4.1.js"/>
-<script src="@{~/static/js/bootstrap/bootstrap.bundle.min.js}" crossorigin="anonymous"/>
+    <input type="submit" value="Register"/>
+
+</form>
+
 </body>
 </html>
