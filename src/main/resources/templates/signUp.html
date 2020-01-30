@@ -6,7 +6,27 @@
 
 <head th:replace="headerReplacement :: headToReplace(title='Registration Page')"></head>
 <head>
-    <script th:src="@{/js/passwordConfirmation.js}"></script>
+
+    <!--    -->
+    <!--    Registration Page css -->
+    <!--    -->
+    <link rel="stylesheet" th:href="@{/static/css/signUp.css}">
+
+    <!--    -->
+    <!--    Password Confirmation without reloading the page-->
+    <!--    -->
+    <script th:src="@{/static/js/passwordConfirmation.js}"></script>
+
+    <!--    -->
+    <!--    Implementing the library zxcvbn for password strength check-->
+    <!--    -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.2.0/zxcvbn.js"></script>
+
+    <!--    -->
+    <!--    Password Strength check js-->
+    <!--    -->
+    <script th:src="@{/static/js/passwordStrengthCheck.js}"></script>
+
 </head>
 
     <body>
@@ -25,6 +45,9 @@
                         <label for="password"> Password: </label>
                         <input type="password" name="password" id="password" onkeyup="check()" required value=""
                                th:minlength="8" th:maxlength="30"/>    </div>
+                        <meter max="4" id="password-strength-meter"></meter>
+                        <p id="password-strength-text"></p>
+
                     <div class="form-group">
                         <label for="confirm"> Confirm password: </label>
                         <input type="password" name="confirm" id="confirm_password" onkeyup="check()"  required value=""/>
