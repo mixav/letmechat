@@ -1,4 +1,4 @@
-package com.damnteam.letmechat.data.model;
+package com.damnteam.letmechat.data.models;
 
 
 import com.damnteam.letmechat.constraint.ValidPassword;
@@ -29,7 +29,7 @@ public class User implements UserDetails {
 
 
     @Column(nullable = false)
-    @ValidPassword
+//    @ValidPassword
     private final String password;
 
 

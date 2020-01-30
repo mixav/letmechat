@@ -1,7 +1,7 @@
 package com.damnteam.letmechat.data.dto;
 
 
-import com.damnteam.letmechat.data.model.User;
+import com.damnteam.letmechat.data.models.User;
 import lombok.Data;
 import org.springframework.security.crypto.password.PasswordEncoder;
 

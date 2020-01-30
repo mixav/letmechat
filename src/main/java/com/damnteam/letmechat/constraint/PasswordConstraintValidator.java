@@ -1,6 +1,7 @@
 package com.damnteam.letmechat.constraint;
 
 import org.passay.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -15,9 +16,9 @@ public class PasswordConstraintValidator implements ConstraintValidator<ValidPas
     public void initialize(ValidPassword constraintAnnotation) {
     }
 
-
     @Override
     public boolean isValid(String userPassword, ConstraintValidatorContext context) {
+
         PasswordValidator passwordValidator =
                 new PasswordValidator(Arrays.asList(
                         new LengthRule(8, 30),
@@ -29,6 +30,8 @@ public class PasswordConstraintValidator implements ConstraintValidator<ValidPas
                         new QwertySequenceRule(3, false),
                         new WhitespaceRule()
                 ));
+
+        
 
         RuleResult ruleResult = passwordValidator.validate(new PasswordData(userPassword));
 

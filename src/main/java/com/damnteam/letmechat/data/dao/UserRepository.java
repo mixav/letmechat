@@ -1,6 +1,6 @@
 package com.damnteam.letmechat.data.dao;
 
-import com.damnteam.letmechat.data.model.User;
+import com.damnteam.letmechat.data.models.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

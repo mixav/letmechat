@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Let me Chat</title>
-</head>
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+>
 
+<head th:replace="headerReplacement :: headToReplace(title='Login Page')">
 <body>
+
+<header th:replace="headerReplacement :: headerToReplace"> </header>
+
 <h1>Login</h1>
 
 <form method="POST" th:action="@{/login}" id="loginForm">
