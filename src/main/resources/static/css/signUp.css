@@ -1,29 +1,120 @@
-meter {
-    /* Reset the default appearance */
-    -webkit-appearance: none;
-       -moz-appearance: none;
-            appearance: none;
+.sign-up-form-wrap {
+    width: 500px;
+    border-radius: 10px;
+    overflow:hidden;
+    padding: 55px 55px 37px 55px;
+    box-shadow: 1px 3px 8px -2px #35061d;
+    background: #9152f8;
+    background: -webkit-linear-gradient(to right, #ffffff4f, #ea75ae99);
+    background: -o-linear-gradient(to right, #ffffff4f, #ea75ae99);
+    background: -moz-linear-gradient(to right, #ffffff4f, #ea75ae99);
+    background: linear-gradient(to right, #ffffff4f, #ea75ae99);
+}
 
-    margin: 0 auto 1em;
+.sign-up-form {
     width: 100%;
-    height: .5em;
-
-    /* Applicable only to Firefox */
-    background: none;
-    background-color: rgba(0,0,0,0.1);
 }
 
-meter::-webkit-meter-bar {
-    background: none;
-    background-color: rgba(0,0,0,0.1);
+.sign-up-form-title {
+    font-size: 42px;
+    text-align: center;
+    line-height: 1.2;
+    text-transform: uppercase;
+    display: block;
+    color: #faddeb;
+    text-shadow: 1px 1px 10px #761b50;
+    margin-top: 10px;
 }
 
-meter[value="1"]::-webkit-meter-optimum-value { background: red; }
-meter[value="2"]::-webkit-meter-optimum-value { background: yellow; }
-meter[value="3"]::-webkit-meter-optimum-value { background: orange; }
-meter[value="4"]::-webkit-meter-optimum-value { background: green; }
+.sign-up-form-input-wrap {
+    width: 100%;
+    position: relative;
+    border-bottom: 2px solid rgba(255,255,255,0.24);
+    margin-bottom: 30px;
+}
 
-meter[value="1"]::-moz-meter-bar { background: red; }
-meter[value="2"]::-moz-meter-bar { background: yellow; }
-meter[value="3"]::-moz-meter-bar { background: orange; }
-meter[value="4"]::-moz-meter-bar { background: green; }
+.sign-up-form-input {
+    outline: none;
+    border: none;
+    font-size: 16px;
+    line-height: 1.2;
+    width: 100%;
+    height: 45px;
+    background: transparent;
+    padding: 0px 5px 0px 38px;
+}
+
+.sign-up-form-input:focus {
+    border-color: #ffffff transparent;
+}
+
+.sign-up-form-input-focus {
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+.sign-up-form-input-focus::before {
+    content: "";
+    display: block;
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #fff !important;
+
+    -webkit-transition: all 0.4s;
+    -o-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+    transition: all 0.4s;
+}
+
+
+.sign-up-form-input-focus::after {
+    content: attr(data-placeholder);
+    font-size: 22px;
+    color: #fff;
+    display: block;
+    width: 100%;
+    position: absolute;
+    top: 6px;
+    left: 0px;
+    padding-left: 5px;
+    -webkit-transition: all 0.4s;
+    -o-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+    transition: all 0.4s;
+}
+
+.sign-up-form-input:focus + .sign-up-input-focus::after {
+    top: -22px;
+    font-size:18px;
+}
+
+.sign-up-form-input:focus + .sign-up-form-input-focus::before {
+    width: 100%;
+}
+
+.sign-up-form-input-focus .fa{
+    padding-top: 16px;
+    color: #faddeb;
+    text-shadow: 1px 1px 2px #761b50;
+}
+
+.sign-up-form-input::-webkit-input-placeholder {
+    color:#761b50;
+}
+.sign-up-form-input:-ms-input-placeholder {}
+    color:#761b50;
+.sign-up-form-input::placeholder {
+    color:#761b50;
+}
+
+.sign-up-form-logo {
+    margin-bottom: 8px;
+}

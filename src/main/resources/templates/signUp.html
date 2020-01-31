@@ -20,7 +20,7 @@
     <!--    -->
     <!--    Implementing the library zxcvbn for password strength check-->
     <!--    -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.2.0/zxcvbn.js"></script>
+    <script th:src="@{/static/js/zxcvbn.js}"></script>
 
     <!--    -->
     <!--    Password Strength check js-->
@@ -29,48 +29,78 @@
 
 </head>
 
-    <body>
-        <header th:replace="headerReplacement :: headerToReplace"> </header>
-        <main role="main" class="container">
-            <div class="container">
+<body>
+<header th:replace="headerReplacement :: headerToReplace"></header>
 
-                <form method="POST" th:action="@{/registration}" id="registrationForm">
-                    <h2 class="form-title">Create account</h2>
-                    <div class="form-group">
-                        <label for="username"> Username: </label>
-                        <input type="text" name="username" required
-                               pattern="^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$" th:minlength="4" th:maxlength="15"/>
-                    </div>
-                    <div class="form-group">
-                        <label for="password"> Password: </label>
-                        <input type="password" name="password" id="password" onkeyup="check()" required value=""
-                               th:minlength="8" th:maxlength="30"/>    </div>
-                        <meter max="4" id="password-strength-meter"></meter>
-                        <p id="password-strength-text"></p>
+<main role="main" class="container-fluid bg">
+    <div class="page-container">
+        <div class="container sign-up-form-wrap">
+            <form class="sign-up-form" method="POST" th:action="@{/registration}" id="registrationForm">
 
-                    <div class="form-group">
-                        <label for="confirm"> Confirm password: </label>
-                        <input type="password" name="confirm" id="confirm_password" onkeyup="check()"  required value=""/>
-                        <span id="message"></span>
-                    </div>
+                    <!--                Form title-->
+                    <span class="sign-up-form-title">
+                        <img th:src="@{/static/images/icon.png}" class="img-fluid sign-up-form-logo" height="50px" width="50px">
+                    Sign Up
+                </span>
 
-                    <div class="form-group">
-                        <label for="firstName"> First name: </label>
-                        <input type="text" name="firstName" required/>
-                    </div>
+                <!--Username input-->
+                <div class="form-group sign-up-form-input-wrap">
+                    <label for="username" class="sr-only"> Username </label>
+                    <input class="sign-up-form-input" type="text" name="username" placeholder="Username"
+                           pattern="^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$"
+                           th:minlength="4" th:maxlength="15" required>
+                    <span class="sign-up-form-input-focus" data-placeholder="">
+                        <i class="fas fa fa-user"></i>
+                    </span>
+                </div>
+                <!--First Name input-->
+                <div class="form-group sign-up-form-input-wrap">
+                    <label for="firstName" class="sr-only"> First Name </label>
+                    <input class="sign-up-form-input" type="text" name="firstName" placeholder="First Name" required>
+                </div>
+                <!--Last Name input-->
+                <div class="form-group sign-up-form-input-wrap">
+                    <label for="lastName" class="sr-only"> Last Name </label>
+                    <input class="sign-up-form-input" type="text" name="lastName" placeholder="Last Name" required>
+                </div>
+                <!--Password input-->
+                <div class="form-group sign-up-form-input-wrap">
+                    <label for="password" class="sr-only"> Password </label>
+                    <input class="sign-up-form-input" id="password" type="password" name="password" placeholder="Password"
+                           onkeyup="check()" value="" th:minlength="8" th:maxlength="30" required>
+                    <span class="sign-up-form-input-focus" data-placeholder="">
+                        <i class="fas fa fa-lock"></i>
+                    </span>
+                </div>
+                <!--Password Confirmation input-->
+                <div class="form-group sign-up-form-input-wrap">
+                    <label class="sr-only">Confirm Password </label>
+                    <input class="sign-up-form-input" id="confirm_password" type="password" name="confirm_password"
+                           placeholder="Confirm Password" onkeyup="check()" required>
+                    <span class="sign-up-form-input-focus" data-placeholder="">
+                        <i class="fas fa fa-lock"></i>
+                    </span>
+                </div>
 
-                    <div class="form-group">
-                        <label for="lastName"> Last name: </label>
-                        <input type="text" name="lastName" required/>
-                    </div>
 
-                    <div class="form-group">
-                        <input type="submit" value="Register"/>
-                    </div>
+                <!--                    Button input-->
+                <div class="form-group sign-up-form-btn-wrap">
+                    <input type="submit" value="Register">
+                </div>
 
-                </form>
-            </div>
-        </main>
+                <!--Form note-->
+                <div class="sign-up-form-note-wrap">
+                        <span class="sign-up-form-note"> Already have an account?
+                            <a th:href="@{/login}"> Sign in </a>
+                        </span>
+                </div>
 
-    </body>
+            </form>
+
+        </div>
+    </div>
+
+</main>
+
+</body>
 </html>
